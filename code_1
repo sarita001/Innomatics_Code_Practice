@@ -104,3 +104,53 @@ SCP file transfers to OBIEE and IASS succeed using updated, RHEL 9–compliant s
 DFR Pre-DEPT allocation logic correctly handles holidays based on the calendar file.
 
 All upstream and downstream connectivity checks post-RHEL 9 upgrade pass without issue.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Objectives:
+To enhance job performance, update service credentials, redirect data flows, automate log transmission via API, modernize SCP scripts, and validate system connectivity post-upgrade.
+
+Rationale:
+These changes are necessary to improve efficiency, maintain security compliance, support automation, and ensure readiness for the RHEL 9 environment.
+
+Outcome:
+Post-deployment, all systems are expected to perform as intended with improved stability, secure integrations, and verified operational continuity.
+
+Impacted Areas:
+DER, Recon, SPM Ontime, DFR, OBIEE, IASS, RHEL 9 systems
+
+Impact Description:
+Changes affect data flow, job performance, log transmission, allocation logic, and RHEL 9 compatibility. No downtime expected; all updates are tested and backward-compatible.
+
+Dependent Areas:
+Job schedulers, database configurations, network infrastructure, API endpoints, RHEL 9 environment
+
+Dependent Description:
+Successful deployment relies on the proper configuration of job schedulers, network connectivity for data routing, API availability for log transmission, and RHEL 9 environment readiness. Any issues in these areas may impact the deployment's success.
+
+
+Risk Description:
+Risks include connectivity issues, RHEL 9 compatibility problems, API log transmission failures, and misconfigurations in data redirection or holiday logic.
+
+Risk Mitigation Plan:
+Test thoroughly in staging, implement API retries, monitor critical components during deployment, and ensure quick team coordination for issue resolution.
+
+
+
+
