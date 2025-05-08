@@ -1,156 +1,163 @@
-# advanced_logger.py
+To migrate GLFS mainframe functions to the FIG platform as part of the Mainframe De-risking initiative, streamlining GL transaction processing and reducing legacy system dependencies.
 
-import logging
-import os
-from logging.handlers import RotatingFileHandler
-from colorlog import ColoredFormatter
+Onboard 8 new upstream applications to send 205A/205B files directly to FIG.
 
-def setup_advanced_logger(
-    log_dir="logs",
-    log_file="app.log",
-    error_file="error.log",
-    max_bytes=5*1024*1024,  # 5 MB
-    backup_count=3,
-    log_level=logging.DEBUG
-):
-    os.makedirs(log_dir, exist_ok=True)
-    
-    logger = logging.getLogger()
-    logger.setLevel(log_level)
+Configure new feed definitions and processing logic in FIG.
 
-    if logger.hasHandlers():
-        logger.handlers.clear()
+Implement translation, validation, and suspense handling using Informatica workflows.
 
-    # === File Handler (All logs) ===
-    all_logs_path = os.path.join(log_dir, log_file)
-    file_handler = RotatingFileHandler(all_logs_path, maxBytes=max_bytes, backupCount=backup_count)
-    file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    file_handler.setFormatter(file_formatter)
-    logger.addHandler(file_handler)
+Enable posting to Cloud or eLedger based on company rules.
 
-    # === Error File Handler (Only errors) ===
-    error_logs_path = os.path.join(log_dir, error_file)
-    error_handler = RotatingFileHandler(error_logs_path, maxBytes=max_bytes, backupCount=backup_count)
-    error_handler.setLevel(logging.ERROR)
-    error_handler.setFormatter(file_formatter)
-    logger.addHandler(error_handler)
+Develop SAP posting processes including document split, suspense clearing, and large amount handling.
 
-    # === Console Handler (Colored) ===
-    console_handler = logging.StreamHandler()
-    console_formatter = ColoredFormatter(
-        "%(log_color)s%(asctime)s - %(levelname)s - %(message)s",
-        log_colors={
-            'DEBUG': 'cyan',
-            'INFO': 'green',
-            'WARNING': 'yellow',
-            'ERROR': 'red',
-            'CRITICAL': 'bold_red'
-        }
-    )
-    console_handler.setFormatter(console_formatter)
-    logger.addHandler(console_handler)
+Generate and send reconciliation files to Frontier.
 
-    return logger
-
-
-# Optional: Convenience methods
-def log_debug(msg): logging.getLogger().debug(msg)
-def log_info(msg): logging.getLogger().info(msg)
-def log_warning(msg): logging.getLogger().warning(msg)
-def log_error(msg): logging.getLogger().error(msg)
-def log_critical(msg): logging.getLogger().critical(msg)
-
-
-
-
-
-# Sample usage: main.py
-from advanced_logger import (
-    setup_advanced_logger,
-    log_info,
-    log_warning,
-    log_error,
-    log_debug,
-    log_critical
-)
-
-setup_advanced_logger()
-
-log_debug("Debug: This is for developers.")
-log_info("Info: Script started successfully.")
-log_warning("Warning: Low memory.")
-log_error("Error: File not found.")
-log_critical("Critical: System failure imminent.")
-
-
-
-
-Given all code changes, configuration updates, and scripts are deployed successfully,
-When the system components are executed under normal operational conditions,
-Then the following outcomes must be met to consider the deployment successful:
-
-The DER EMEA Owner Ref match process completes faster with optimized performance.
-
-All production jobs using the updated service ID authenticate and run without failure.
-
-RegE transmissions are successfully redirected to the Recon1 endpoint with no data loss.
-
-Frontier job logs are delivered to SPM Ontime via API and acknowledged successfully.
-
-The Python script reliably calls the SPM API, handles responses, and logs results.
-
-SCP file transfers to OBIEE and IASS succeed using updated, RHEL 9–compliant scripts.
-
-DFR Pre-DEPT allocation logic correctly handles holidays based on the calendar file.
-
-All upstream and downstream connectivity checks post-RHEL 9 upgrade pass without issue.
+Provide user access to reports and config via FIG UI and FIPS.
 
 
 
 
 
 
+description
+This change decommissions the existing GLFS mainframe application and migrates all its functionality to the FIG platform. This includes translation, validation, suspense clearing, posting logic, reporting, and reconciliation processes. The goal is to reduce dependency on mainframe technologies, streamline processing by consolidating logic into FIG, and enhance scalability and maintainability.
+
+The change will onboard 8 upstream applications to send their general ledger feeds directly to FIG. FIG will perform all existing GLFS functions and post transactions to the Cloud or eLedger based on company-specific logic, with reconciliations sent to Frontier. New user interfaces and reporting modules are also being developed as part of this effort.
+
+
+
+DD
+8 upstream apps send 205A/205B files to FIG Prod
+
+Feed setup done via FIG UI and database updates
+
+Translation and validation use FIG and RDR mapping, DIMENSION table
+
+Suspense combos used if Account or Center is missing
+
+Transactions posted to eLedger or Cloud based on company type
+
+SAP process includes rule mapping, force balancing, doc split, suspense clearing
+
+BD1–BD5 prior month data split for SAP QSP posting
+
+Recon files created by FIG and sent to Frontier using account key
+
+FIG UI and FIPS provide access to config and GLFS reports
+
+Autosys jobs scheduled to manage feed processing
+
+
+
+Given the 8 upstream applications are successfully onboarded and all FIG components—including feed configurations, Informatica mappings, database updates, UI enhancements, and Autosys jobs—are deployed,
+when the upstream files (205A/205B formats) are received by FIG and processed through each stage (translation, validation, suspense handling, posting, reporting),
+then the system should:
+– translate and validate transactions using FIG and RDR mappings,
+– apply suspense combinations if Account or Cost Center is missing,
+– post validated transactions to the appropriate destination (eLedger or Cloud) based on company type,
+– split and send prior-month BD1–BD5 data to SAP for QSP,
+– generate accurate reconciliation files matched to account keys for Frontier,
+– and provide users access to configuration data and reports via FIG UI and FIPS,
+with all automated workflows triggered and completed successfully through Autosys jobs.
+
+
+
+The objective of this release is to deploy Frontier-related changes as part of the GLFS to FIG migration, ensuring that all new upstream feeds, validation logic, suspense handling, posting processes, and reconciliation capabilities are fully functional within FIG.
+
+All 8 upstream applications send files successfully to FIG Prod
+
+Informatica workflows for translation, validation, and posting complete without errors
+
+Suspense logic applies correctly for incomplete records
+
+Transactions are routed accurately to eLedger or Cloud based on company mapping
+
+BD1–BD5 files are split and posted to SAP QSP
+
+Frontier reconciliation files are generated and delivered as scheduled
+
+FIG UI and FIPS allow access to config data and GLFS reports
+
+All Autosys jobs run and complete as per schedule
+
+This will confirm a successful deployment.
 
 
 
 
+Objective
+Migrate GLFS functions to FIG for centralized processing of upstream GL feeds, validations, suspense handling, and posting.
+
+Rationale
+Eliminate mainframe dependencies, streamline GL transaction processing, improve efficiency, and enhance reporting and reconciliation.
+
+Outcome
+Successful migration and feed configuration in FIG
+
+Automated translation, validation, and posting of transactions
+
+Improved reconciliation and reporting capabilities for Frontier
+
+Reduced manual intervention and enhanced operational transparency
 
 
 
+Impact: Migration to FIG will update upstream feed processing, requiring 8 applications to send 205A/205B files directly to FIG. FIG will handle Frontier reconciliation files, alter SAP QSP posting, and introduce new interfaces (FIG UI and FIPS) for users to access reports and configurations.
+
+mpact:
+Migration to FIG will impact feed processing, reconciliation, SAP integration, and user interfaces.
+
+Impacted Area:
+
+Upstream Feed Processing
+
+Reconciliation & Reporting
+
+SAP Integration
+
+User Interfaces
+
+Impacted Description:
+
+Upstream Feed Processing: 8 applications will send 205A/205B files to FIG.
+
+Reconciliation & Reporting: FIG will handle Frontier reconciliation files.
+
+SAP Integration: BD1–BD5 files will be routed through FIG for SAP QSP posting.
+
+User Interfaces: Users will interact with the new FIG UI and FIPS for reports.
 
 
+Dependency:
+Migration to FIG depends on integrating 8 upstream applications, configuring new feeds in FIG, and updating databases and workflows.
 
+Dependent Area:
 
+Upstream Applications
 
+Feed Configuration
 
-Objectives:
-To enhance job performance, update service credentials, redirect data flows, automate log transmission via API, modernize SCP scripts, and validate system connectivity post-upgrade.
-
-Rationale:
-These changes are necessary to improve efficiency, maintain security compliance, support automation, and ensure readiness for the RHEL 9 environment.
-
-Outcome:
-Post-deployment, all systems are expected to perform as intended with improved stability, secure integrations, and verified operational continuity.
-
-Impacted Areas:
-DER, Recon, SPM Ontime, DFR, OBIEE, IASS, RHEL 9 systems
-
-Impact Description:
-Changes affect data flow, job performance, log transmission, allocation logic, and RHEL 9 compatibility. No downtime expected; all updates are tested and backward-compatible.
-
-Dependent Areas:
-Job schedulers, database configurations, network infrastructure, API endpoints, RHEL 9 environment
+Database/Workflow Updates
 
 Dependent Description:
-Successful deployment relies on the proper configuration of job schedulers, network connectivity for data routing, API availability for log transmission, and RHEL 9 environment readiness. Any issues in these areas may impact the deployment's success.
+
+Upstream Applications: 8 applications must send 205A/205B files to FIG.
+
+Feed Configuration: New feeds must be set up in FIG.
+
+Database/Workflow Updates: Databases and workflows need to support new processes.
 
 
-Risk Description:
-Risks include connectivity issues, RHEL 9 compatibility problems, API log transmission failures, and misconfigurations in data redirection or holiday logic.
+
+Risk:
+There is a risk of integration issues during the migration, including file format mismatches, delays in setting up new feeds, and potential disruptions in data flow between upstream applications and FIG.
 
 Risk Mitigation Plan:
-Test thoroughly in staging, implement API retries, monitor critical components during deployment, and ensure quick team coordination for issue resolution.
 
+Conduct thorough testing of upstream file formats and integrations prior to deployment.
 
+Ensure proper configuration of new feed definitions in FIG.
+
+Set up a rollback plan in case of failures, with defined checkpoints for integration validation.
 
 
