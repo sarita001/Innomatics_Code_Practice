@@ -1,163 +1,101 @@
-To migrate GLFS mainframe functions to the FIG platform as part of the Mainframe De-risking initiative, streamlining GL transaction processing and reducing legacy system dependencies.
-
-Onboard 8 new upstream applications to send 205A/205B files directly to FIG.
-
-Configure new feed definitions and processing logic in FIG.
-
-Implement translation, validation, and suspense handling using Informatica workflows.
-
-Enable posting to Cloud or eLedger based on company rules.
-
-Develop SAP posting processes including document split, suspense clearing, and large amount handling.
-
-Generate and send reconciliation files to Frontier.
-
-Provide user access to reports and config via FIG UI and FIPS.
-
-
-
-
-
-
-description
-This change decommissions the existing GLFS mainframe application and migrates all its functionality to the FIG platform. This includes translation, validation, suspense clearing, posting logic, reporting, and reconciliation processes. The goal is to reduce dependency on mainframe technologies, streamline processing by consolidating logic into FIG, and enhance scalability and maintainability.
-
-The change will onboard 8 upstream applications to send their general ledger feeds directly to FIG. FIG will perform all existing GLFS functions and post transactions to the Cloud or eLedger based on company-specific logic, with reconciliations sent to Frontier. New user interfaces and reporting modules are also being developed as part of this effort.
-
-
-
-DD
-8 upstream apps send 205A/205B files to FIG Prod
-
-Feed setup done via FIG UI and database updates
-
-Translation and validation use FIG and RDR mapping, DIMENSION table
-
-Suspense combos used if Account or Center is missing
-
-Transactions posted to eLedger or Cloud based on company type
-
-SAP process includes rule mapping, force balancing, doc split, suspense clearing
-
-BD1–BD5 prior month data split for SAP QSP posting
-
-Recon files created by FIG and sent to Frontier using account key
-
-FIG UI and FIPS provide access to config and GLFS reports
-
-Autosys jobs scheduled to manage feed processing
-
-
-
-Given the 8 upstream applications are successfully onboarded and all FIG components—including feed configurations, Informatica mappings, database updates, UI enhancements, and Autosys jobs—are deployed,
-when the upstream files (205A/205B formats) are received by FIG and processed through each stage (translation, validation, suspense handling, posting, reporting),
-then the system should:
-– translate and validate transactions using FIG and RDR mappings,
-– apply suspense combinations if Account or Cost Center is missing,
-– post validated transactions to the appropriate destination (eLedger or Cloud) based on company type,
-– split and send prior-month BD1–BD5 data to SAP for QSP,
-– generate accurate reconciliation files matched to account keys for Frontier,
-– and provide users access to configuration data and reports via FIG UI and FIPS,
-with all automated workflows triggered and completed successfully through Autosys jobs.
-
-
-
-The objective of this release is to deploy Frontier-related changes as part of the GLFS to FIG migration, ensuring that all new upstream feeds, validation logic, suspense handling, posting processes, and reconciliation capabilities are fully functional within FIG.
-
-All 8 upstream applications send files successfully to FIG Prod
-
-Informatica workflows for translation, validation, and posting complete without errors
-
-Suspense logic applies correctly for incomplete records
-
-Transactions are routed accurately to eLedger or Cloud based on company mapping
-
-BD1–BD5 files are split and posted to SAP QSP
-
-Frontier reconciliation files are generated and delivered as scheduled
-
-FIG UI and FIPS allow access to config data and GLFS reports
-
-All Autosys jobs run and complete as per schedule
-
-This will confirm a successful deployment.
-
-
-
-
-Objective
-Migrate GLFS functions to FIG for centralized processing of upstream GL feeds, validations, suspense handling, and posting.
-
-Rationale
-Eliminate mainframe dependencies, streamline GL transaction processing, improve efficiency, and enhance reporting and reconciliation.
-
-Outcome
-Successful migration and feed configuration in FIG
-
-Automated translation, validation, and posting of transactions
-
-Improved reconciliation and reporting capabilities for Frontier
-
-Reduced manual intervention and enhanced operational transparency
-
-
-
-Impact: Migration to FIG will update upstream feed processing, requiring 8 applications to send 205A/205B files directly to FIG. FIG will handle Frontier reconciliation files, alter SAP QSP posting, and introduce new interfaces (FIG UI and FIPS) for users to access reports and configurations.
-
-mpact:
-Migration to FIG will impact feed processing, reconciliation, SAP integration, and user interfaces.
-
-Impacted Area:
-
-Upstream Feed Processing
-
-Reconciliation & Reporting
-
-SAP Integration
-
-User Interfaces
-
-Impacted Description:
-
-Upstream Feed Processing: 8 applications will send 205A/205B files to FIG.
-
-Reconciliation & Reporting: FIG will handle Frontier reconciliation files.
-
-SAP Integration: BD1–BD5 files will be routed through FIG for SAP QSP posting.
-
-User Interfaces: Users will interact with the new FIG UI and FIPS for reports.
-
-
-Dependency:
-Migration to FIG depends on integrating 8 upstream applications, configuring new feeds in FIG, and updating databases and workflows.
-
-Dependent Area:
-
-Upstream Applications
-
-Feed Configuration
-
-Database/Workflow Updates
-
-Dependent Description:
-
-Upstream Applications: 8 applications must send 205A/205B files to FIG.
-
-Feed Configuration: New feeds must be set up in FIG.
-
-Database/Workflow Updates: Databases and workflows need to support new processes.
-
-
-
-Risk:
-There is a risk of integration issues during the migration, including file format mismatches, delays in setting up new feeds, and potential disruptions in data flow between upstream applications and FIG.
-
-Risk Mitigation Plan:
-
-Conduct thorough testing of upstream file formats and integrations prior to deployment.
-
-Ensure proper configuration of new feed definitions in FIG.
-
-Set up a rollback plan in case of failures, with defined checkpoints for integration validation.
-
-
+import os
+import time
+import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.edge.options import Options
+from selenium.webdriver.common.by import By
+import win32com.client as win32
+
+# Load the input Excel
+df = pd.read_excel("input.xlsx")
+
+# Create screenshots folder
+os.makedirs("screenshots", exist_ok=True)
+
+options = Options()
+options.use_chromium = True
+driver = webdriver.Edge(options=options)
+driver.get("https://your-regw-url.com")  # Replace with real URL
+driver.maximize_window()
+time.sleep(5)  # Wait for page to load or SSO to complete
+
+summary = []
+
+for index, row in df.iterrows():
+    txn_id = str(row['Transaction ID'])
+    expected_amt = str(row['Expected Amount'])
+    expected_date = str(row['Expected Date'])
+
+    try:
+        # Fill inputs (update element locators with actual IDs or XPaths)
+        driver.find_element(By.ID, "transaction_input").clear()
+        driver.find_element(By.ID, "transaction_input").send_keys(txn_id)
+
+        driver.find_element(By.ID, "from_date").clear()
+        driver.find_element(By.ID, "from_date").send_keys(expected_date)
+
+        driver.find_element(By.ID, "to_date").clear()
+        driver.find_element(By.ID, "to_date").send_keys(expected_date)
+
+        # Click search
+        driver.find_element(By.ID, "search_button").click()
+        time.sleep(2)
+
+        # Click View Attachment
+        driver.find_element(By.LINK_TEXT, "View Attachment").click()
+        time.sleep(2)
+
+        # Check if amount/date is present in the page
+        page_source = driver.page_source
+        status = "Matched" if expected_amt in page_source and expected_date in page_source else "Not Matched"
+
+        # Screenshot
+        screenshot_path = f"screenshots/{txn_id}.png"
+        driver.save_screenshot(screenshot_path)
+
+    except Exception as e:
+        status = "Error"
+        screenshot_path = "None"
+        print(f"❌ Failed for Transaction {txn_id}: {e}")
+
+    # Add to summary
+    summary.append({
+        "Transaction ID": txn_id,
+        "Expected Amount": expected_amt,
+        "Expected Date": expected_date,
+        "Status": status,
+        "Screenshot": screenshot_path
+    })
+
+
+summary_df = pd.DataFrame(summary)
+summary_file = "screenshots/summary_report.xlsx"
+summary_df.to_excel(summary_file, index=False)
+
+
+successes = summary_df[summary_df['Status'] == 'Matched']
+failures = summary_df[summary_df['Status'] == 'Not Matched']
+
+body = f"""
+Hi Team,
+
+Please find attached the Reg W submission summary report for today.
+
+✅ Matched Transactions: {len(successes)}
+❌ Not Matched Transactions: {len(failures)}
+
+Screenshots are saved here: {os.path.abspath("screenshots")}
+
+Regards,
+RegW Automation Bot
+"""
+
+outlook = win32.Dispatch('outlook.application')
+mail = outlook.CreateItem(0)
+mail.To = 'user@example.com'  # Replace with actual team email
+mail.Subject = 'Daily Reg W Review Summary Report'
+mail.Body = body
+mail.Attachments.Add(os.path.abspath(summary_file))
+mail.Send()
+
+print("✅ Email sent successfully.")
