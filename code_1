@@ -99,3 +99,52 @@ mail.Attachments.Add(os.path.abspath(summary_file))
 mail.Send()
 
 print("✅ Email sent successfully.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import pandas as pd
+
+def read_excel_config(file_path, sheet_name=0):
+    """
+    Reads an Excel sheet into a dictionary using 'Key' and 'Value' columns.
+
+    :param file_path: Path to the Excel file.
+    :param sheet_name: Sheet name or index (default is first sheet).
+    :return: Dictionary with config key-value pairs.
+    """
+    try:
+        df = pd.read_excel(file_path, sheet_name=sheet_name)
+        
+        if 'Key' not in df.columns or 'Value' not in df.columns:
+            raise ValueError("Excel file must contain 'Key' and 'Value' columns.")
+        
+        config_dict = pd.Series(df.Value.values, index=df.Key).to_dict()
+        return config_dict
+
+    except Exception as e:
+        print(f"Error reading config file: {e}")
+        return {}
+
+# Example usage
+if __name__ == "__main__":
+    config = read_excel_config("config.xlsx")
+    print("Config Loaded:", config)
+    # You can now use config['db_host'], config['region'], etc.
+
