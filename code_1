@@ -1,150 +1,89 @@
-import os
-import time
-import pandas as pd
-from selenium import webdriver
-from selenium.webdriver.edge.options import Options
-from selenium.webdriver.common.by import By
-import win32com.client as win32
-
-# Load the input Excel
-df = pd.read_excel("input.xlsx")
-
-# Create screenshots folder
-os.makedirs("screenshots", exist_ok=True)
-
-options = Options()
-options.use_chromium = True
-driver = webdriver.Edge(options=options)
-driver.get("https://your-regw-url.com")  # Replace with real URL
-driver.maximize_window()
-time.sleep(5)  # Wait for page to load or SSO to complete
-
-summary = []
-
-for index, row in df.iterrows():
-    txn_id = str(row['Transaction ID'])
-    expected_amt = str(row['Expected Amount'])
-    expected_date = str(row['Expected Date'])
-
-    try:
-        # Fill inputs (update element locators with actual IDs or XPaths)
-        driver.find_element(By.ID, "transaction_input").clear()
-        driver.find_element(By.ID, "transaction_input").send_keys(txn_id)
-
-        driver.find_element(By.ID, "from_date").clear()
-        driver.find_element(By.ID, "from_date").send_keys(expected_date)
-
-        driver.find_element(By.ID, "to_date").clear()
-        driver.find_element(By.ID, "to_date").send_keys(expected_date)
-
-        # Click search
-        driver.find_element(By.ID, "search_button").click()
-        time.sleep(2)
-
-        # Click View Attachment
-        driver.find_element(By.LINK_TEXT, "View Attachment").click()
-        time.sleep(2)
-
-        # Check if amount/date is present in the page
-        page_source = driver.page_source
-        status = "Matched" if expected_amt in page_source and expected_date in page_source else "Not Matched"
-
-        # Screenshot
-        screenshot_path = f"screenshots/{txn_id}.png"
-        driver.save_screenshot(screenshot_path)
-
-    except Exception as e:
-        status = "Error"
-        screenshot_path = "None"
-        print(f"❌ Failed for Transaction {txn_id}: {e}")
-
-    # Add to summary
-    summary.append({
-        "Transaction ID": txn_id,
-        "Expected Amount": expected_amt,
-        "Expected Date": expected_date,
-        "Status": status,
-        "Screenshot": screenshot_path
-    })
+Technical Change Summary
+The objective of this release is to deploy updates supporting the DFR LATAM go-live, enhance the certification process, and implement improvements in data retention and file transmissions.
+•	Integrate Subaccount Rule into the daily file generation process to improve accuracy during pre-assignment.
+•	Configure the OPTIM Lookup Table to retain loaded data for six months for audit and reference purposes.
+•	Update DFR Recon transmission by routing the LA/CA file from Recon1 to Recon to align with the new reconciliation process.
+•	Activate Informatica DFR LATAM jobs to support regional deployment.
+•	Move scheduled jobs for LATAM and Canada from the inactive scheduler to Scheduler 74 as part of a dark deployment strategy.
 
 
-summary_df = pd.DataFrame(summary)
-summary_file = "screenshots/summary_report.xlsx"
-summary_df.to_excel(summary_file, index=False)
-
-
-successes = summary_df[summary_df['Status'] == 'Matched']
-failures = summary_df[summary_df['Status'] == 'Not Matched']
-
-body = f"""
-Hi Team,
-
-Please find attached the Reg W submission summary report for today.
-
-✅ Matched Transactions: {len(successes)}
-❌ Not Matched Transactions: {len(failures)}
-
-Screenshots are saved here: {os.path.abspath("screenshots")}
-
-Regards,
-RegW Automation Bot
-"""
-
-outlook = win32.Dispatch('outlook.application')
-mail = outlook.CreateItem(0)
-mail.To = 'user@example.com'  # Replace with actual team email
-mail.Subject = 'Daily Reg W Review Summary Report'
-mail.Body = body
-mail.Attachments.Add(os.path.abspath(summary_file))
-mail.Send()
-
-print("✅ Email sent successfully.")
+Deployment Success / Exit Criteria
+The deployment will be considered successful and complete when the following criteria are met:
+•	Daily file generation includes the integrated Subaccount Rule logic and completes without errors.
+•	OPTIM Lookup Table successfully retains data as per the updated 6-month retention configuration, verified via test load and retention check.
+•	DFR LA/CA file transmission is successfully routed to the Recon location, with no failures in transmission or processing.
+•	Informatica DFR LATAM jobs are activated and run successfully in the production environment, confirmed via job logs and monitoring.
+•	LATAM and Canada scheduled jobs are moved to Scheduler 74 and verified as active, with no unintended job triggers or failures.
+•	No critical or high-severity issues are reported within the monitoring period post-deployment.
 
 
 
 
 
 
+Design Details
+Steps taken to achieve the requirements:
+•	Update the daily file generation logic to integrate the Subaccount Rule within the pre-assignment step, ensuring accurate rule application.
+•	Modify the OPTIM Lookup Table configuration to enforce a 6-month data retention policy, validated through test data loads.
+•	Change the DFR LA/CA file routing from Recon1 to Recon by updating job parameters and transmission paths to align with the new reconciliation flow.
+•	Activate Informatica DFR LATAM jobs in production, ensuring all dependencies, parameters, and connections are correctly configured.
+•	Move LATAM and Canada jobs from the inactive scheduler to Scheduler 74, maintaining a dark deployment mode (no active triggers) until go-live.
+•	Perform validation through job monitoring, file output checks, and confirmation from stakeholders post-deployment.
+
+Given the deployment is complete with all configurations in place (including Subaccount Rule integration, OPTIM retention setup, updated DFR file routing, Informatica LATAM job activation, and scheduler transition),
+When the system processes scheduled jobs and related data flows as per the new design,
+Then all components should function as expected—daily files should apply the Subaccount Rule, the OPTIM table should retain data for 6 months, LA/CA files should route to the correct destination, Informatica LATAM jobs should run without errors, and LATAM/Canada jobs should appear on Scheduler 74 in dark mode—with no critical issues observed post-deployment.
+
+Objective
+Deploy enhancements for DFR LATAM go-live, improve certification accuracy, optimize data retention, and update file transmission and job scheduling.
+
+Rationale
+Ensure compliance, improve data integrity, streamline reconciliation, and enable safe, controlled deployment.
+
+Outcome
+Accurate file processing, six-month data retention, correct file routing, error-free job execution, and seamless scheduler transition.
 
 
+Impacted Area
+•	Daily File Processing
+•	OPTIM Lookup Table
+•	DFR File Transmission
+•	Informatica Jobs
+•	Job Scheduler (Scheduler 74)
+________________________________________
+Impacted Description
+•	Pre-assignment logic updated with Subaccount Rule.
+•	Lookup table data retention set to six months.
+•	LA/CA files rerouted from Recon1 to Recon.
+•	LATAM Informatica jobs activated.
+•	LATAM/Canada jobs moved to Scheduler 74.
 
 
+Dependent Area
+•	Source Data Systems
+•	Network/File Transfer Infrastructure
+•	Informatica ETL Platform
+•	Job Monitoring and Alerting Tools
+•	Scheduler 74 Environment
+________________________________________
+Dependent Description
+•	Accurate and timely data input from source systems is essential for processing.
+•	Reliable network and file transfer systems must support updated routing paths.
+•	Informatica platform must be stable for LATAM job executions.
+•	Monitoring tools must detect job failures or data issues promptly.
+•	Scheduler 74 must be fully operational to handle migrated jobs.
 
-
-
-
-
-
-
-
-
-
-import pandas as pd
-
-def read_excel_config(file_path, sheet_name=0):
-    """
-    Reads an Excel sheet into a dictionary using 'Key' and 'Value' columns.
-
-    :param file_path: Path to the Excel file.
-    :param sheet_name: Sheet name or index (default is first sheet).
-    :return: Dictionary with config key-value pairs.
-    """
-    try:
-        df = pd.read_excel(file_path, sheet_name=sheet_name)
-        
-        if 'Key' not in df.columns or 'Value' not in df.columns:
-            raise ValueError("Excel file must contain 'Key' and 'Value' columns.")
-        
-        config_dict = pd.Series(df.Value.values, index=df.Key).to_dict()
-        return config_dict
-
-    except Exception as e:
-        print(f"Error reading config file: {e}")
-        return {}
-
-# Example usage
-if __name__ == "__main__":
-    config = read_excel_config("config.xlsx")
-    print("Config Loaded:", config)
-    # You can now use config['db_host'], config['region'], etc.
+Risk Description
+•	Subaccount Rule integration may cause processing errors.
+•	Data retention misconfiguration could lead to data loss.
+•	File rerouting might cause transmission failures.
+•	LATAM Informatica jobs risk configuration errors.
+•	Scheduler 74 migration may cause job execution issues.
+________________________________________
+Risk Mitigation Plan
+•	Test Subaccount Rule thoroughly before deployment.
+•	Validate retention settings and monitor data post-deployment.
+•	Test file routing and monitor transmissions.
+•	Verify and test Informatica job configs.
+•	Migrate scheduler during low-impact times and monitor jobs closely.
 
