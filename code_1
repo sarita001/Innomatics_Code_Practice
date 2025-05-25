@@ -1,13 +1,58 @@
-8 new upstream applications were onboarded to send 205A/205B files directly to FIG.
+Step 1: Make main.py Functions Callable
+In main.py, wrap your logic inside a function:
 
-New feed definitions and processing logic were configured in FIG.
+# main.py
+def run_pcat_processing(pcat_dir, classifier_file, access_dir, output_dir):
+    # Your actual logic here
+    print(f"PCAT Dir: {pcat_dir}")
+    print(f"Classifier File: {classifier_file}")
+    print(f"Access Review Dir: {access_dir}")
+    print(f"Output Dir: {output_dir}")
 
-Translation, validation, and suspense handling were implemented using Informatica workflows.
+    # Simulate processing...
+    return "Processing completed successfully."
+Make sure main.py does not run anything directly on script start (i.e., no code under if __name__ == "__main__" unless needed).
 
-Posting to Cloud or eLedger was enabled based on company-specific rules.
 
-SAP posting processes were developed, including document split, suspense clearing, and large amount handling.
+Step 2: Import main.py in ui.py
+At the top of ui.py, import the function:
 
-Reconciliation files were generated and sent to Frontier.
 
-User access to reports and configuration was provided via FIG UI and FIPS.
+from main import run_pcat_processing
+
+
+ Call It in Your GUI's on_process() Method
+Inside your PCATRoleClassifierPanel class in ui.py, update on_process:
+
+
+def on_process(self, event):
+    try:
+        # Get inputs from GUI
+        pcat_dir = self.pcat_extracts.get_value()
+        classifier_file = self.excel_file.get_value()
+        access_dir = self.myaccess_review.get_value()
+        output_dir = self.output_file.get_value()
+
+        # Validate inputs (optional)
+        if not all([pcat_dir, classifier_file, access_dir, output_dir]):
+            self.output_display.SetLabel("Please fill in all fields.")
+            return
+
+        # Call processing logic
+        result = run_pcat_processing(pcat_dir, classifier_file, access_dir, output_dir)
+
+        # Show result in UI
+        self.output_display.SetLabel(result)
+    except Exception as e:
+        self.output_display.SetLabel(f" Error: {str(e)}")
+
+
+
+When the user selects all folders/files and clicks Process, it will:
+
+Call your main.py logic,
+
+Pass all the values,
+
+Display the result in the GUI.
+
