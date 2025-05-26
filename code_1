@@ -1,58 +1,252 @@
-Step 1: Make main.py Functions Callable
-In main.py, wrap your logic inside a function:
+main.py
 
-# main.py
-def run_pcat_processing(pcat_dir, classifier_file, access_dir, output_dir):
-    # Your actual logic here
-    print(f"PCAT Dir: {pcat_dir}")
-    print(f"Classifier File: {classifier_file}")
-    print(f"Access Review Dir: {access_dir}")
-    print(f"Output Dir: {output_dir}")
+import logging
+import sys
+import os
+import pandas as pd
+from datetime import datetime
+from openpyxl import Workbook
+from comp1_excel_functionalities import *
 
-    # Simulate processing...
-    return "Processing completed successfully."
-Make sure main.py does not run anything directly on script start (i.e., no code under if __name__ == "__main__" unless needed).
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
+logger = logging.getLogger(__name__)
 
-
-Step 2: Import main.py in ui.py
-At the top of ui.py, import the function:
-
-
-from main import run_pcat_processing
-
-
- Call It in Your GUI's on_process() Method
-Inside your PCATRoleClassifierPanel class in ui.py, update on_process:
-
-
-def on_process(self, event):
+def read_config(config_path):
     try:
-        # Get inputs from GUI
-        pcat_dir = self.pcat_extracts.get_value()
-        classifier_file = self.excel_file.get_value()
-        access_dir = self.myaccess_review.get_value()
-        output_dir = self.output_file.get_value()
-
-        # Validate inputs (optional)
-        if not all([pcat_dir, classifier_file, access_dir, output_dir]):
-            self.output_display.SetLabel("Please fill in all fields.")
-            return
-
-        # Call processing logic
-        result = run_pcat_processing(pcat_dir, classifier_file, access_dir, output_dir)
-
-        # Show result in UI
-        self.output_display.SetLabel(result)
+        config_df = pd.read_excel(config_path)
+        logger.info("Config file loaded successfully.")
+        return config_df
     except Exception as e:
-        self.output_display.SetLabel(f" Error: {str(e)}")
+        logger.error(f"Failed to load config file: {e}")
+        raise
+
+def report_creation(output_folder, df_out, df_out1, sheetname1, sheetname2):
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    extension = ".xlsx"
+    reportpath = os.path.join(output_folder, "Output_" + timestamp + extension)
+
+    with pd.ExcelWriter(reportpath) as writer:
+        df_out.to_excel(writer, sheet_name=sheetname1, index=False)
+        df_out1.to_excel(writer, sheet_name=sheetname2, index=False)
+    
+    # Coloring tab red (optional)
+    wb = Workbook()
+    ws = wb.active
+    ws.sheet_properties.tabColor = "FF0000"  # Red color
+    wb.save(reportpath)
+
+    logger.info(f'Updating result to the report {reportpath}')
+    return reportpath
+
+def run_processing(pcat_path, accessreview_path, platform_list_path, config_path, output_folder):
+    """
+    This function performs the full processing workflow.
+    It can be called from UI by passing the required file/folder paths as strings.
+    """
+    logger.info("Starting processing from run_processing function")
+
+    # Read configuration
+    df_config = read_config(config_path)
+    df_T = df_config.set_index('Name').T
+    dic = df_T.to_dict('records')
+    dict_config = dic[0]
+
+    # Validate and list files
+    if not os.path.exists(pcat_path):
+        raise FileNotFoundError(f"PCAT path '{pcat_path}' does not exist")
+    PCAT_files = list_files_in_directory(pcat_path, logger)
+    if not PCAT_files:
+        raise FileNotFoundError(f"No files found in PCAT path '{pcat_path}'")
+    logger.info(f"Files found in '{pcat_path}': {len(PCAT_files)}")
+
+    if not os.path.exists(accessreview_path):
+        raise FileNotFoundError(f"Access Review path '{accessreview_path}' does not exist")
+    accessReview_files = list_files_in_directory(accessreview_path, logger)
+    if not accessReview_files:
+        raise FileNotFoundError(f"No files found in Access Review path '{accessreview_path}'")
+    logger.info(f"Files found in '{accessreview_path}': {len(accessReview_files)}")
+
+    if not os.path.exists(platform_list_path):
+        raise FileNotFoundError(f"Platform List file '{platform_list_path}' does not exist")
+
+    # Processing steps
+    df_prod_NonProd = check_Prod_NonProd(PCAT_files, platform_list_path, dict_config, logger)
+    df_readOnly = check_ReadOnLy(df_prod_NonProd, dict_config, logger)
+    df_ElevatedAccess = Potential_Elevated_Access(df_readOnly, logger)
+    dic_userMapped = user_mapping(df_ElevatedAccess, accessReview_files, dict_config, logger)
+
+    df_userMapped = dic_userMapped[0]
+    df_userUnMapped = dic_userMapped[1]
+
+    output_columns = [col.strip() for col in str(dict_config.get("Output_Columns")).split(',')]
+    df_out = df_userMapped[output_columns]
+    df_out1 = df_userUnMapped[output_columns]
+
+    report_path = report_creation(output_folder, df_out, df_out1, sheetname1="Elevated", sheetname2="Non Elevated")
+
+    return f"Processing completed successfully. Report generated at:\n{report_path}"
+
+
+# If you want to keep command line interface (optional)
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Find users Elevated access using PCAT Extract and Access Review")
+    parser.add_argument("-pcat", "--PCAT", required=True, help="Path to the PCAT directory.")
+    parser.add_argument("-accessreview", "--AccessReview", required=True, help="Path to the Access Review directory.")
+    parser.add_argument("-platform", "--PlatformList", required=True, help="Path to the platforms file")
+    parser.add_argument("-config", "--config", required=True, help="Path to the config file.")
+    parser.add_argument("-output", "--output", required=True, help="Path to the Output directory.")
+    args = parser.parse_args()
+
+    # Run the processing function with CLI args
+    result_message = run_processing(
+        pcat_path=args.PCAT,
+        accessreview_path=args.AccessReview,
+        platform_list_path=args.PlatformList,
+        config_path=args.config,
+        output_folder=args.output
+    )
+    print(result_message)
+
+
+if __name__ == "__main__":
+    main()
 
 
 
-When the user selects all folders/files and clicks Process, it will:
 
-Call your main.py logic,
+ui.py
 
-Pass all the values,
+import wx
+import os
 
-Display the result in the GUI.
+# Add this import for integration
+from main import run_processing
+
+# MainPanel class provides a reusable component for selecting files or directories
+class MainPanel (wx.Panel):
+    def __init_(self, parent, label, browse_for="file", wildcard="All files (*.*)|*.*)"):
+        super().__init_(parent)
+        # Store the type of browsing (file or folder) and file filter
+        self.browse_for = browse_for
+        self.wildcard = wildcard
+
+        # Create a horizontal layout for the panel
+        sizer = wx.BoxSizer (wx.HORIZONTAL)
+
+        # Add a label, a read-only text control, and a browse button
+        self. label = wx. StaticText(self, Label=label, size=wx. Size(250, -1))
+        self. text_ctrl = wx. Texttrl(self, style=wx. TE_READONLY, size=wx.Size(250, 20))
+        self. browse_button = wx. Button(self, Label="Browse")
+
+        # Add components to the sizer
+        sizer.Add(self. label, 0, wx. ALL | wx. EXPAND, 5)
+        sizer.Add(self. text_ctrl, 0, wx.ALL | wx. EXPAND, 5)
+        sizer.Add(self. browse_button, 0, wx. ALL | wx. EXPAND, 5)
+
+        #Set the sizer for layout management
+        self.SetSizer(sizer)
+
+        # Bind the browse button to the event handler
+        self.browse_button.Bind(wx.EVT_BUTTON, self.on_browse)
+
+        def on_browse(self, event):
+
+            """
+            Event handler for the browse button.
+            Opens a file or folder dialog based on the browse_for attribute.
+            """
+
+            if self.browse_for == "folder":
+                # Open a directory selection dialog
+                with wx.DirDialog(self, "Choose a Directory", style= wx.DD_DEFAULT_STYLE) as dir_dialog:
+                    if dir_dialog.ShowModal() == wx.ID_CANCEL:
+                        return
+                    path = dir_dialog.GetPath()
+                    self.text_ctrl.SetValue(path)
+            elif self.browse_for == "file":
+                # Open a file selection dialog
+                with wx.FileDialog(self, "Choose a file", wildcard=self.wildcard,style = wx.FD_OPEN | wx.FD_FILE_MUST_EXIST) as file_dialog:
+                    if file_dialog.ShowModal() == wx.ID_CANCEL:
+                        return
+                    path = file_dialog.GetPath()
+                    self.text_ctrl.SetValue(path)
+
+    def get_value(self):
+        """
+        Returns the current value of the text control.
+        """
+        return self.text_ctrl.GetValue()
+
+# PCATRoleClassifierPanel class provides a panel for the PCAT Role Classifier functionality
+class PCATRoleClassifierPanel(wx.Panel):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        # Create a vertical layout for the panel
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+
+        # Add input fields for various paths
+        self.pcat_extracts = MainPanel(self, Label="PCAT Extracts", browse_for"folder")
+        self.pcat_extracts.text_ctrl.SetBackgroundColour(wx.Colour(200, 230, 200))
+        self.sizer.Add(self.pcat_extracts, 0, wx.ALL | wx.EXPAND)
+        self.excel_file = MainPanel(self, label="Select PCAT Platform Classifier File", browse_for="file",
+                                    wildcard="Excel Files (.XLsx)|.XLsx")
+        self.excel_file.text_ctrl.SetBackgroundColour(wx.Colour(220, 200, 240))
+        self.sizer.Add(self.excel_file, 0, wx.ALL | wx.EXPAND)
+        self.myaccess_review = MainPanel(self, Label="Select Access Review directory", browse_for="folder")
+        self.myaccess_review.text_ctrl.SetBackgroundColour(wx.Colour(200, 240, 240))
+        self.sizer.Add(self.myaccess_review, 0, wx.ALL | wx.EXPAND)
+        self.output_file = MainPanel(self, label="Output file directory", browse_for="folder")
+        self.output_file.text_ctrl.SetBackgroundColour(wx.Colour(230, 210, 190))
+        self.sizer.Add(self.output_file, 0, wx.ALL | wx.EXPAND)
+
+        #Add a process button
+
+        self.process_button = wx.Button(self, label="Process")
+        self.sizer.Add(self.process_button, 0, wx.ALL | wx.CENTER, 10)
+
+        # Add a static text for displaying output
+        self.output_display = wx.StaticText(self, label="", style=wx.ALIGN_LEFT)
+        self.sizer.Add(self.output_display, 0, wx.ALL | wx.EXPAND, 10)
+
+        # Set the sizer for layout management
+        self.SetSizer(self.sizer)
+
+        # Bind the process button to the event handler
+        self.process_button.Bind(wx.EVT_BUTTON, self.on_process)
+
+    # THIS METHOD IS MODIFIED TO ADD CALL TO main.py function
+    def on_process(self, event):
+        paths = {
+            "PCAT Extracts": self.pcat_extracts.get_value(),
+            "PCAT Platform Classifier File": self.excel_file.get_value(),
+            "Access Review directory": self.myaccess_review.get_value(),
+            "Output file Directory": self.output_file.get_value()
+        }
+
+        try:
+            # Call your main.py function run_processing()
+            message = run_processing(
+                pcat_path=paths["PCAT Extracts"],
+                accessreview_path=paths["Access Review directory"],
+                platform_list_path="",  # No UI field for this, you can extend UI if needed
+                config_path="",         # No UI field for this, add if you want
+                output_folder=paths["Output file Directory"]
+            )
+            self.output_display.SetLabel(message)
+        except Exception as e:
+            self.output_display.SetLabel(f"Error during processing: {e}")
+
+# The rest of your UI code remains unchanged
+# PCATUpdateImpactSimulator class, MyFrame, MyApp, etc.
+
+# ... your existing code for PCATUpdateImpactSimulator and others goes here unchanged ...
+
 
