@@ -1,67 +1,47 @@
-import sys
+The first half of the year 2025 has been a period of strong learning, meaningful contributions, and steady growth. I had the opportunity to work across diverse areas mentioned below.
 
-def create_pdf(input_path, output_path):
-    with open(input_path, 'r') as txt_file:
-        lines = txt_file.readlines()
+Took the lead in gathering, analysing, and documenting requirements for several Python scripts to facilitate their seamless conversion to Informatica. This effort ensured clarity and alignment for the Informatica team, supporting a smooth transition. Collaborated closely with the config team to clarify business logic, ensuring both the config and Informatica teams were aligned on functionality.
 
-    with open(output_path, 'wb') as pdf_file:
-        # Basic PDF headers
-        pdf_file.write(b"%PDF-1.1\n")
-        objects = []
+Regularly monitored RSS mailbox and Frontier jobs, with a focus on timely issue resolution and job failure tracking. Also handled Out-of-Balance (OOB) tracking and weekend job monitoring to maintain less to no OOB counts and job failures each day.
 
-        # Page content (very basic text format in PDF syntax)
-        text_stream = "BT\n/F1 12 Tf\n72 720 Td\n"
-        y = 0
-        for line in lines:
-            safe_line = line.strip().replace('(', '\\(').replace(')', '\\)')
-            text_stream += f"0 -14 Td ({safe_line}) Tj\n"
-            y += 14
-        text_stream += "ET"
 
-        stream_bytes = text_stream.encode('latin1')
-        length = len(stream_bytes)
+Played a key role in the RHEL9 upgrade and server migration process, from coordinating with upstream/downstream teams to guiding UAT/Production testing. Ensured minimal impact by proactively communicating, troubleshooting errors, and also as I was the change coordinator for this change in May and June, worked on creating the CRQs for it to closing it for both the testing in UAT and Prod.
 
-        # Object 1: Font
-        objects.append(b"1 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n")
-        
-        # Object 2: Page content stream
-        objects.append(f"2 0 obj\n<< /Length {length} >>\nstream\n".encode() + stream_bytes + b"\nendstream\nendobj\n")
-        
-        # Object 3: Page
-        objects.append(b"3 0 obj\n<< /Type /Page /Parent 4 0 R /Resources << /Font << /F1 1 0 R >> >> /Contents 2 0 R >>\nendobj\n")
-        
-        # Object 4: Pages
-        objects.append(b"4 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n")
-        
-        # Object 5: Catalog
-        objects.append(b"5 0 obj\n<< /Type /Catalog /Pages 4 0 R >>\nendobj\n")
+Actively managed BD1, BD2, and other month-end activities, ensuring seamless operations and timely completion of critical tasks.
 
-        # Writing objects
-        xref = []
-        offset = pdf_file.tell()
-        for obj in objects:
-            xref.append(offset)
-            pdf_file.write(obj)
-            offset = pdf_file.tell()
 
-        # Write xref table
-        xref_start = offset
-        pdf_file.write(f"xref\n0 {len(objects)+1}\n0000000000 65535 f \n".encode())
-        for off in xref:
-            pdf_file.write(f"{off:010d} 00000 n \n".encode())
+Contributing to a POC for migrating from OpenText Content Navigator to Content Suite. Currently working on Python scripts to automate file generation and uploads, aiming to reduce manual effort and improve process efficiency.
 
-        # Trailer
-        pdf_file.write(b"trailer\n<< /Size 6 /Root 5 0 R >>\nstartxref\n")
-        pdf_file.write(f"{xref_start}\n%%EOF\n".encode())
 
-    print(f"PDF created successfully: {output_path}")
+Currently working on a Tableau dashboard POC to enhance data visualization and reporting for Frontier JIRAs. This initiative aims to provide better insights and support informed decision-making 
+through improved reporting capabilities.
 
-# --- Main ---
-if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python txt_to_pdf_plain.py input.txt output.pdf")
-        sys.exit(1)
+Took complete ownership of the change management process for the Frontier Finance application—from creating and managing CRQs to linking them with relevant RMs, EPICs, and ensuring proper documentation in intake forms. Actively mentored team members on adhering to change protocols to ensure smooth execution. Played a key role in the successful May and June releases, which included three changes in May (such as UAT testing for the RHEL9 upgrade) and the RHEL9 Production cutover in June. Ensured all releases were executed without escalations and received appreciation from the manager for effectively managing the entire process.
 
-    input_txt = sys.argv[1]
-    output_pdf = sys.argv[2]
-    create_pdf(input_txt, output_pdf)
+In addition to my core deliverables, I proactively extended my support to various other tasks to broaden my learning and gain more hands-on experience.
+
+Played an active role in multiple OpenTap projects, leveraging technical skills to deliver effective and innovative solutions. Demonstrated strong ownership and collaboration throughout, which earned appreciation from project owners for my dedication, problem-solving approach, and consistent delivery of high-quality results.
+
+Contributing to ERFT AI/ML team  by documenting meeting minutes, organizing shared repositories, and organizing presentations to support effective collaboration and knowledge sharing. Currently working on the POC for developing an intelligent chatbot capable of interpreting user inputs in natural language, dynamically generating SQL queries, which will then be executed for fetching relevant data. 
+
+Involved in two projects in Onesource. One focuses on automating advisory notifications for planned and ad-hoc maintenance downtimes as part of the FCMT environment management process aimed at informing affected teams in advance to minimize disruptions. The other is part of an Opentap project.
+
+Serving as the Innovation SPOC under the GFT space, mentoring and guiding team members to submit their ideas through the SpeakUp portal. Maintaining the innovation tracker to monitor progress, ensure timely follow-ups, and provide visibility into idea status. Collaborating closely with Opex Partners to drive ideas from submission to implementation. So far this year, successfully facilitated the implementation of 2 ideas out of 10 submitted in the last quarter.
+
+Exploring and identifying automation opportunities within the GFT space, with a focus on streamlining processes, enhancing operational efficiency, and minimizing manual effort.
+
+Outside of my technical contributions, I made it a point to stay engaged with ESG and team-building activities, promoting a positive and responsible work environment.
+
+Contributed enthusiastically to team-building initiatives, including skits and cultural events, helping to cultivate a vibrant, inclusive, and collaborative work culture. Played a key role in energizing the team spirit and fostering meaningful connections across functions.
+
+Championed ESG efforts by leading and engaging in sustainability-focused events that aligned with the organization’s environmental and social goals. Took initiative in promoting awareness and driving participation, reinforcing a culture of responsibility and impact.
+
+Focus Areas for the Next Half Year
+Leverage GitHub Copilot and its agents to identify and develop impactful use cases that enhance productivity, automation, and innovation.
+Finalize and file the patent for the innovation currently being developed as part of the patent cluster initiative.
+Continue identifying and implementing automation opportunities, and contribute to impactful, forward-looking projects within the GFT space.
+Advance the chatbot solution and explore additional GenAI use cases aligned with banking needs specially for ERFT usecase to drive meaningful business value.
+Pursue targeted learning opportunities and certifications to strengthen both technical and professional competencies.
+Maintain active involvement in ESG and employee engagement initiatives to support organizational culture, sustainability, and team collaboration.
+
+As I move into the second half of the year, my focus remains only on continuous technical learning, and cross-functional collaboration.
