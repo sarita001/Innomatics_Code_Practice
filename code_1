@@ -1,62 +1,77 @@
 import sys
+import textwrap
 
 def escape_pdf_text(text):
-    return text.replace('\\', '\\\\').replace('(', '\\(').replace(')', '\\)')
+    return text.replace('(', '\\(').replace(')', '\\)')
 
-def txt_to_pdf(input_file, output_file):
-    with open(input_file, 'r') as txt:
-        lines = txt.readlines()
+def create_pdf(input_path, output_path):
+    with open(input_path, 'r', encoding='utf-8') as txt_file:
+        lines = txt_file.readlines()
 
-    pdf_lines = []
-    pdf_lines.append("%PDF-1.1")
-    pdf_lines.append("1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj")
-    pdf_lines.append("2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj")
+    with open(output_path, 'wb') as pdf_file:
+        pdf_file.write(b"%PDF-1.4\n")
 
-    content = "BT\n/F1 12 Tf\n72 750 Td\n"
-    for i, line in enumerate(lines):
-        safe_line = escape_pdf_text(line.rstrip('\n'))
-        content += f"0 -14 Td ({safe_line}) Tj\n"
+        objects = []
+        object_offsets = []
 
-    content += "ET"
+        # Prepare text content stream
+        content = "BT\n/F1 12 Tf\n"
+        start_x = 72  # 1 inch from left
+        start_y = 750  # near top of page
+        line_height = 14
+        max_chars_per_line = 90
+        current_y = start_y
 
-    pdf_lines.append("4 0 obj << /Length " + str(len(content.encode())) + " >> stream")
-    pdf_lines.append(content)
-    pdf_lines.append("endstream endobj")
+        for line in lines:
+            for wrapped in textwrap.wrap(line.rstrip('\n'), width=max_chars_per_line):
+                if current_y < 30:
+                    break  # stop printing before going below margin
+                safe_line = escape_pdf_text(wrapped)
+                content += f"1 0 0 1 {start_x} {current_y} Tm ({safe_line}) Tj\n"
+                current_y -= line_height
 
-    pdf_lines.append("""3 0 obj
-<< /Type /Page /Parent 2 0 R
-/MediaBox [0 0 612 792]
-/Contents 4 0 R
-/Resources << /Font << /F1 5 0 R >> >> >> endobj""")
+        content += "ET"
+        content_bytes = content.encode('latin1')
+        content_length = len(content_bytes)
 
-    pdf_lines.append("5 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Courier >> endobj")
+        # Object 1: Font
+        objects.append(b"1 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>\nendobj\n")
 
-    # Collect all object byte offsets
-    xref = []
-    offset = 0
-    pdf_bytes = b''
-    for line in pdf_lines:
-        encoded = (line + '\n').encode('latin1')
-        xref.append(offset)
-        pdf_bytes += encoded
-        offset += len(encoded)
+        # Object 2: Content stream
+        stream_obj = b"2 0 obj\n<< /Length %d >>\nstream\n" % content_length
+        stream_obj += content_bytes + b"\nendstream\nendobj\n"
+        objects.append(stream_obj)
 
-    xref_start = offset
-    pdf_bytes += f"xref\n0 {len(xref)+1}\n0000000000 65535 f \n".encode()
-    for o in xref:
-        pdf_bytes += f"{o:010d} 00000 n \n".encode()
+        # Object 3: Page
+        objects.append(b"3 0 obj\n<< /Type /Page /Parent 4 0 R /Resources << /Font << /F1 1 0 R >> >> /Contents 2 0 R >>\nendobj\n")
 
-    pdf_bytes += b"trailer\n<< /Size %d /Root 1 0 R >>\n" % (len(xref)+1)
-    pdf_bytes += b"startxref\n%d\n%%EOF\n" % xref_start
+        # Object 4: Pages
+        objects.append(b"4 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n")
 
-    with open(output_file, 'wb') as out_pdf:
-        out_pdf.write(pdf_bytes)
+        # Object 5: Catalog
+        objects.append(b"5 0 obj\n<< /Type /Catalog /Pages 4 0 R >>\nendobj\n")
 
-    print(f"✅ PDF created: {output_file}")
+        # Write all objects and track their offsets
+        for obj in objects:
+            object_offsets.append(pdf_file.tell())
+            pdf_file.write(obj)
 
-# Usage: python script.py input.txt output.pdf
+        # Write xref table
+        xref_start = pdf_file.tell()
+        pdf_file.write(f"xref\n0 {len(objects)+1}\n0000000000 65535 f \n".encode())
+        for offset in object_offsets:
+            pdf_file.write(f"{offset:010d} 00000 n \n".encode())
+
+        # Trailer
+        pdf_file.write(b"trailer\n<< /Size 6 /Root 5 0 R >>\nstartxref\n")
+        pdf_file.write(f"{xref_start}\n%%EOF\n".encode())
+
+    print(f"✅ PDF created: {output_path}")
+
+# --- Main ---
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python txt_to_pdf.py input.txt output.pdf")
-    else:
-        txt_to_pdf(sys.argv[1], sys.argv[2])
+        print("Usage: python txt_to_pdf_clean.py input.txt output.pdf")
+        sys.exit(1)
+
+    create_pdf(sys.argv[1], sys.argv[2])
