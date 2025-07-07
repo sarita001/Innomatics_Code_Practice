@@ -1,47 +1,77 @@
-from fpdf import FPDF
-from PyPDF2 import PdfReader, PdfWriter
 import sys
-import os
 
-class TXTtoPDF(FPDF):
-    def __init__(self):
-        super().__init__()
-        self.set_auto_page_break(auto=True, margin=15)
-        self.add_page()
-        self.set_font("Courier", size=11)
+def escape_text(text):
+    return text.replace('\\', '\\\\').replace('(', '\\(').replace(')', '\\)')
 
-    def add_txt_content(self, txt_path):
-        with open(txt_path, 'r') as file:
-            for line in file:
-                self.cell(0, 6, txt=line.rstrip(), ln=True)
+def wrap_line(line, max_chars):
+    """Wraps a line into chunks of max_chars."""
+    return [line[i:i+max_chars] for i in range(0, len(line), max_chars)]
 
-def upgrade_pdf_version(input_pdf, output_pdf, version="1.7"):
-    reader = PdfReader(input_pdf)
-    writer = PdfWriter()
+def create_pdf(input_path, output_path):
+    with open(input_path, 'r') as txt_file:
+        lines = txt_file.readlines()
 
-    for page in reader.pages:
-        writer.add_page(page)
+    with open(output_path, 'wb') as pdf:
+        # Start of PDF
+        pdf.write(b"%PDF-1.7\n")  # Updated version
 
-    writer.pdf_header = f"%PDF-{version}"
-    with open(output_pdf, "wb") as f:
-        writer.write(f)
+        objects = []
+        offsets = []
 
-def convert_txt_to_pdf17(txt_file):
-    base_name = os.path.splitext(txt_file)[0]
-    temp_pdf = base_name + "_temp.pdf"
-    final_pdf = base_name + "_v1.7.pdf"
+        # 1. Font Object
+        font_obj = b"1 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>\nendobj\n"
+        objects.append(font_obj)
 
-    pdf = TXTtoPDF()
-    pdf.add_txt_content(txt_file)
-    pdf.output(temp_pdf)
+        # 2. Content Stream (with wrapping and smaller font)
+        text_lines = "BT /F1 8 Tf 72 800 Td\n"  # Start at top with 8pt font
+        for line in lines:
+            line = line.rstrip()
+            wrapped_lines = wrap_line(line, 85)  # Adjust max_chars for width
+            for wline in wrapped_lines:
+                escaped = escape_text(wline)
+                text_lines += f"({escaped}) Tj\n0 -10 Td\n"  # Move to next line
+        text_lines += "ET"
+        text_stream = text_lines.encode('latin1')
+        content_obj = b"2 0 obj\n<< /Length %d >>\nstream\n%s\nendstream\nendobj\n" % (len(text_stream), text_stream)
+        objects.append(content_obj)
 
-    upgrade_pdf_version(temp_pdf, final_pdf)
-    os.remove(temp_pdf)  # cleanup
+        # 3. Page Object
+        page_obj = b"3 0 obj\n<< /Type /Page /Parent 4 0 R /Contents 2 0 R /Resources << /Font << /F1 1 0 R >> >> >>\nendobj\n"
+        objects.append(page_obj)
 
-    print(f"✅ PDF created: {final_pdf} (Version 1.7)")
+        # 4. Pages Object
+        pages_obj = b"4 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n"
+        objects.append(pages_obj)
 
+        # 5. Catalog
+        catalog_obj = b"5 0 obj\n<< /Type /Catalog /Pages 4 0 R >>\nendobj\n"
+        objects.append(catalog_obj)
+
+        # Write objects and track offsets
+        for obj in objects:
+            offsets.append(pdf.tell())
+            pdf.write(obj)
+
+        # xref table
+        xref_offset = pdf.tell()
+        pdf.write(f"xref\n0 {len(objects)+1}\n".encode())
+        pdf.write(b"0000000000 65535 f \n")
+        for offset in offsets:
+            pdf.write(f"{offset:010d} 00000 n \n".encode())
+
+        # trailer
+        pdf.write(b"trailer\n")
+        pdf.write(f"<< /Size {len(objects)+1} /Root 5 0 R >>\n".encode())
+        pdf.write(b"startxref\n")
+        pdf.write(f"{xref_offset}\n".encode())
+        pdf.write(b"%%EOF\n")
+
+    print(f"\n✅ Clean PDF generated at: {output_path}\n")
+
+# --- Main ---
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python txt2pdf.py <file.txt>")
-    else:
-        convert_txt_to_pdf17(sys.argv[1])
+    if len(sys.argv) != 3:
+        print("Usage: python txt_to_pdf_clean.py input.txt output.pdf")
+        sys.exit(1)
+
+    create_pdf(sys.argv[1], sys.argv[2])
