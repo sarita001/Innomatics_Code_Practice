@@ -1,55 +1,47 @@
-from reportlab.lib.pagesizes import landscape, letter
-from reportlab.pdfgen import canvas
-from reportlab.pdfbase.pdfmetrics import stringWidth
+from fpdf import FPDF
+from PyPDF2 import PdfReader, PdfWriter
+import sys
+import os
 
-def text_to_pdf(input_file, output_file):
-    page_width, page_height = landscape(letter)
-    c = canvas.Canvas(output_file, pagesize=(page_width, page_height))
+class TXTtoPDF(FPDF):
+    def __init__(self):
+        super().__init__()
+        self.set_auto_page_break(auto=True, margin=15)
+        self.add_page()
+        self.set_font("Courier", size=11)
 
-    font_name = "Courier"
-    font_size = 11
-    line_height = 15
-    margin = 40
-    max_width = page_width - 2 * margin
+    def add_txt_content(self, txt_path):
+        with open(txt_path, 'r') as file:
+            for line in file:
+                self.cell(0, 6, txt=line.rstrip(), ln=True)
 
-    c.setFont(font_name, font_size)
+def upgrade_pdf_version(input_pdf, output_pdf, version="1.7"):
+    reader = PdfReader(input_pdf)
+    writer = PdfWriter()
 
-    try:
-        with open(input_file, "r") as f:
-            lines = f.readlines()
-    except FileNotFoundError:
-        print("Error: Input file not found.")
-        return
+    for page in reader.pages:
+        writer.add_page(page)
 
-    y = page_height - margin
+    writer.pdf_header = f"%PDF-{version}"
+    with open(output_pdf, "wb") as f:
+        writer.write(f)
 
-    for line in lines:
-        line = line.rstrip()
-        text_width = stringWidth(line, font_name, font_size)
+def convert_txt_to_pdf17(txt_file):
+    base_name = os.path.splitext(txt_file)[0]
+    temp_pdf = base_name + "_temp.pdf"
+    final_pdf = base_name + "_v1.7.pdf"
 
-        # Auto scale if line is too long
-        if text_width > max_width:
-            scale = max_width / text_width
-            c.saveState()
-            c.translate(margin, y)
-            c.scale(scale, 1)
-            c.drawString(0, 0, line)
-            c.restoreState()
-        else:
-            c.drawString(margin, y, line)
+    pdf = TXTtoPDF()
+    pdf.add_txt_content(txt_file)
+    pdf.output(temp_pdf)
 
-        y -= line_height
-        if y < margin:
-            c.showPage()
-            c.setFont(font_name, font_size)
-            y = page_height - margin
+    upgrade_pdf_version(temp_pdf, final_pdf)
+    os.remove(temp_pdf)  # cleanup
 
-    c.save()
-    print("📄 PDF created with smart line scaling!")
+    print(f"✅ PDF created: {final_pdf} (Version 1.7)")
 
 if __name__ == "__main__":
-    import sys
-    if len(sys.argv) != 3:
-        print("Usage: python txt2pdf.py <input_file.txt> <output_file.pdf>")
+    if len(sys.argv) < 2:
+        print("Usage: python txt2pdf.py <file.txt>")
     else:
-        text_to_pdf(sys.argv[1], sys.argv[2])
+        convert_txt_to_pdf17(sys.argv[1])
