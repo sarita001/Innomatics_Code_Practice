@@ -4,7 +4,7 @@ from reportlab.pdfgen import canvas
 
 def text_to_pdf(input_file, output_file):
     c = canvas.Canvas(output_file, pagesize=letter)
-    c.setFont("Courier", 10)  # Use monospaced font
+    c.setFont("Courier", 8)  # Slightly smaller font
 
     try:
         with open(input_file, "r") as f:
@@ -14,15 +14,19 @@ def text_to_pdf(input_file, output_file):
         return
 
     y = 750
-    line_height = 14
+    x = 40
+    line_height = 12  # Adjusted for smaller font
 
     for line in lines:
-        if y < 40:  # Create new page if space runs out
+        if y < 40:
             c.showPage()
-            c.setFont("Courier", 10)
+            c.setFont("Courier", 8)
             y = 750
 
-        c.drawString(50, y, line.rstrip())
+        # Truncate lines that exceed the page width to avoid drawing beyond the edge
+        line = line.rstrip("\n")
+        max_chars = 120  # Estimate max characters that fit in 8pt Courier
+        c.drawString(x, y, line[:max_chars])
         y -= line_height
 
     c.save()
