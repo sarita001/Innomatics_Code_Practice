@@ -1,11 +1,18 @@
-import argparse
 from reportlab.lib.pagesizes import landscape, letter
 from reportlab.pdfgen import canvas
+from reportlab.pdfbase.pdfmetrics import stringWidth
 
 def text_to_pdf(input_file, output_file):
-    # Use landscape for wider layout
-    c = canvas.Canvas(output_file, pagesize=landscape(letter))
-    c.setFont("Courier", 8)
+    page_width, page_height = landscape(letter)
+    c = canvas.Canvas(output_file, pagesize=(page_width, page_height))
+
+    font_name = "Courier"
+    font_size = 11
+    line_height = 15
+    margin = 40
+    max_width = page_width - 2 * margin
+
+    c.setFont(font_name, font_size)
 
     try:
         with open(input_file, "r") as f:
@@ -14,29 +21,35 @@ def text_to_pdf(input_file, output_file):
         print("Error: Input file not found.")
         return
 
-    width, height = landscape(letter)
-    y = height - 40  # Start near top
-    x = 40
-    line_height = 12
+    y = page_height - margin
 
     for line in lines:
-        if y < 40:
-            c.showPage()
-            c.setFont("Courier", 8)
-            y = height - 40
+        line = line.rstrip()
+        text_width = stringWidth(line, font_name, font_size)
 
-        line = line.rstrip("\n")
-        max_chars = 160  # More room in landscape
-        c.drawString(x, y, line[:max_chars])
+        # Auto scale if line is too long
+        if text_width > max_width:
+            scale = max_width / text_width
+            c.saveState()
+            c.translate(margin, y)
+            c.scale(scale, 1)
+            c.drawString(0, 0, line)
+            c.restoreState()
+        else:
+            c.drawString(margin, y, line)
+
         y -= line_height
+        if y < margin:
+            c.showPage()
+            c.setFont(font_name, font_size)
+            y = page_height - margin
 
     c.save()
-    print(f"PDF created successfully at: {output_file}")
+    print("📄 PDF created with smart line scaling!")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Convert TXT to PDF (landscape, fixed-width layout)")
-    parser.add_argument("input_file", help="Path to input .txt file")
-    parser.add_argument("output_file", help="Path to output .pdf file")
-    args = parser.parse_args()
-
-    text_to_pdf(args.input_file, args.output_file)
+    import sys
+    if len(sys.argv) != 3:
+        print("Usage: python txt2pdf.py <input_file.txt> <output_file.pdf>")
+    else:
+        text_to_pdf(sys.argv[1], sys.argv[2])
