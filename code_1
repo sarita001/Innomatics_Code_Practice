@@ -1,77 +1,52 @@
 import sys
-import textwrap
+from fpdf import FPDF
+from PyPDF2 import PdfMerger
+import os
 
-def escape_pdf_text(text):
-    return text.replace('(', '\\(').replace(')', '\\)')
+def create_pdf(input_file, output_pdf='output.pdf', template_pdf=None):
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
 
-def create_pdf(input_path, output_path):
-    with open(input_path, 'r', encoding='utf-8') as txt_file:
-        lines = txt_file.readlines()
+    # Use monospaced font
+    pdf.set_font("Courier", size=10)
 
-    with open(output_path, 'wb') as pdf_file:
-        pdf_file.write(b"%PDF-1.4\n")
+    # Set line height
+    line_height = 5
+    page_width = pdf.w - 2 * pdf.l_margin
+    max_chars = int(page_width / pdf.get_string_width('A'))
 
-        objects = []
-        object_offsets = []
+    with open(input_file, 'r') as file:
+        for line in file:
+            line = line.rstrip('\n')
+            while len(line) > 0:
+                part = line[:max_chars]
+                pdf.cell(0, line_height, part, ln=True)
+                line = line[max_chars:]
 
-        # Prepare text content stream
-        content = "BT\n/F1 12 Tf\n"
-        start_x = 72  # 1 inch from left
-        start_y = 750  # near top of page
-        line_height = 14
-        max_chars_per_line = 90
-        current_y = start_y
+    pdf.output(output_pdf)
+    print(f"PDF saved as: {output_pdf}")
 
-        for line in lines:
-            for wrapped in textwrap.wrap(line.rstrip('\n'), width=max_chars_per_line):
-                if current_y < 30:
-                    break  # stop printing before going below margin
-                safe_line = escape_pdf_text(wrapped)
-                content += f"1 0 0 1 {start_x} {current_y} Tm ({safe_line}) Tj\n"
-                current_y -= line_height
+    # Optional: Merge with template if provided
+    if template_pdf and os.path.exists(template_pdf):
+        merged_pdf = 'merged_' + output_pdf
+        merger = PdfMerger()
+        merger.append(template_pdf)
+        merger.append(output_pdf)
+        merger.write(merged_pdf)
+        merger.close()
+        print(f"Merged PDF saved as: {merged_pdf}")
+    elif template_pdf:
+        print(f"Template PDF '{template_pdf}' not found. Skipping merge.")
 
-        content += "ET"
-        content_bytes = content.encode('latin1')
-        content_length = len(content_bytes)
-
-        # Object 1: Font
-        objects.append(b"1 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>\nendobj\n")
-
-        # Object 2: Content stream
-        stream_obj = b"2 0 obj\n<< /Length %d >>\nstream\n" % content_length
-        stream_obj += content_bytes + b"\nendstream\nendobj\n"
-        objects.append(stream_obj)
-
-        # Object 3: Page
-        objects.append(b"3 0 obj\n<< /Type /Page /Parent 4 0 R /Resources << /Font << /F1 1 0 R >> >> /Contents 2 0 R >>\nendobj\n")
-
-        # Object 4: Pages
-        objects.append(b"4 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n")
-
-        # Object 5: Catalog
-        objects.append(b"5 0 obj\n<< /Type /Catalog /Pages 4 0 R >>\nendobj\n")
-
-        # Write all objects and track their offsets
-        for obj in objects:
-            object_offsets.append(pdf_file.tell())
-            pdf_file.write(obj)
-
-        # Write xref table
-        xref_start = pdf_file.tell()
-        pdf_file.write(f"xref\n0 {len(objects)+1}\n0000000000 65535 f \n".encode())
-        for offset in object_offsets:
-            pdf_file.write(f"{offset:010d} 00000 n \n".encode())
-
-        # Trailer
-        pdf_file.write(b"trailer\n<< /Size 6 /Root 5 0 R >>\nstartxref\n")
-        pdf_file.write(f"{xref_start}\n%%EOF\n".encode())
-
-    print(f"✅ PDF created: {output_path}")
-
-# --- Main ---
+# Entry point
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python txt_to_pdf_clean.py input.txt output.pdf")
+    if len(sys.argv) < 2:
+        print("Usage: python txt_to_pdf.py <input.txt> [output.pdf] [template.pdf]")
         sys.exit(1)
 
-    create_pdf(sys.argv[1], sys.argv[2])
+    input_txt = sys.argv[1]
+    output_pdf = sys.argv[2] if len(sys.argv) >= 3 else 'output.pdf'
+    template_pdf = sys.argv[3] if len(sys.argv) >= 4 else None
+
+    create_pdf(input_txt, output_pdf, template_pdf)
