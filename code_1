@@ -1,10 +1,11 @@
 import argparse
-from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import landscape, letter
 from reportlab.pdfgen import canvas
 
 def text_to_pdf(input_file, output_file):
-    c = canvas.Canvas(output_file, pagesize=letter)
-    c.setFont("Courier", 8)  # Slightly smaller font
+    # Use landscape for wider layout
+    c = canvas.Canvas(output_file, pagesize=landscape(letter))
+    c.setFont("Courier", 8)
 
     try:
         with open(input_file, "r") as f:
@@ -13,19 +14,19 @@ def text_to_pdf(input_file, output_file):
         print("Error: Input file not found.")
         return
 
-    y = 750
+    width, height = landscape(letter)
+    y = height - 40  # Start near top
     x = 40
-    line_height = 12  # Adjusted for smaller font
+    line_height = 12
 
     for line in lines:
         if y < 40:
             c.showPage()
             c.setFont("Courier", 8)
-            y = 750
+            y = height - 40
 
-        # Truncate lines that exceed the page width to avoid drawing beyond the edge
         line = line.rstrip("\n")
-        max_chars = 120  # Estimate max characters that fit in 8pt Courier
+        max_chars = 160  # More room in landscape
         c.drawString(x, y, line[:max_chars])
         y -= line_height
 
@@ -33,7 +34,7 @@ def text_to_pdf(input_file, output_file):
     print(f"PDF created successfully at: {output_file}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Convert TXT to PDF (preserving alignment)")
+    parser = argparse.ArgumentParser(description="Convert TXT to PDF (landscape, fixed-width layout)")
     parser.add_argument("input_file", help="Path to input .txt file")
     parser.add_argument("output_file", help="Path to output .pdf file")
     args = parser.parse_args()
