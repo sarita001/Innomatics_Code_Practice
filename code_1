@@ -1,123 +1,62 @@
 import sys
-import textwrap
-
-PAGE_WIDTH = 612
-PAGE_HEIGHT = 792
-LEFT_MARGIN = 72
-TOP_MARGIN = 750
-BOTTOM_MARGIN = 72
-LINE_HEIGHT = 14
-WRAP_WIDTH = 80  # characters per line (adjust if needed)
 
 def escape_pdf_text(text):
     return text.replace('\\', '\\\\').replace('(', '\\(').replace(')', '\\)')
 
-def create_better_pdf(input_path, output_path):
-    with open(input_path, 'r') as txt_file:
-        raw_lines = txt_file.readlines()
+def txt_to_pdf(input_file, output_file):
+    with open(input_file, 'r') as txt:
+        lines = txt.readlines()
 
-    # Wrap long lines
-    wrapped_lines = []
-    for line in raw_lines:
-        wrapped_lines.extend(textwrap.wrap(line.strip(), WRAP_WIDTH))
+    pdf_lines = []
+    pdf_lines.append("%PDF-1.1")
+    pdf_lines.append("1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj")
+    pdf_lines.append("2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj")
 
-    with open(output_path, 'wb') as pdf_file:
-        pdf_file.write(b"%PDF-1.1\n")
-        objects = []
+    content = "BT\n/F1 12 Tf\n72 750 Td\n"
+    for i, line in enumerate(lines):
+        safe_line = escape_pdf_text(line.rstrip('\n'))
+        content += f"0 -14 Td ({safe_line}) Tj\n"
 
-        # Font object
-        objects.append(b"1 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n")
+    content += "ET"
 
-        page_objects = []
-        content_objects = []
-        kids = []
+    pdf_lines.append("4 0 obj << /Length " + str(len(content.encode())) + " >> stream")
+    pdf_lines.append(content)
+    pdf_lines.append("endstream endobj")
 
-        page_number = 0
-        y = TOP_MARGIN
-        page_content = "BT\n/F1 12 Tf\n"
+    pdf_lines.append("""3 0 obj
+<< /Type /Page /Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 4 0 R
+/Resources << /Font << /F1 5 0 R >> >> >> endobj""")
 
-        for i, line in enumerate(wrapped_lines):
-            if y < BOTTOM_MARGIN:
-                # Close current page
-                page_content += "ET"
-                stream_bytes = page_content.encode('latin1')
-                length = len(stream_bytes)
+    pdf_lines.append("5 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Courier >> endobj")
 
-                content_obj_index = len(objects) + 1
-                page_obj_index = content_obj_index + 1
+    # Collect all object byte offsets
+    xref = []
+    offset = 0
+    pdf_bytes = b''
+    for line in pdf_lines:
+        encoded = (line + '\n').encode('latin1')
+        xref.append(offset)
+        pdf_bytes += encoded
+        offset += len(encoded)
 
-                content_objects.append(f"{content_obj_index} 0 obj\n<< /Length {length} >>\nstream\n".encode())
-                content_objects.append(stream_bytes)
-                content_objects.append(b"\nendstream\nendobj\n")
+    xref_start = offset
+    pdf_bytes += f"xref\n0 {len(xref)+1}\n0000000000 65535 f \n".encode()
+    for o in xref:
+        pdf_bytes += f"{o:010d} 00000 n \n".encode()
 
-                page_objects.append(
-                    f"{page_obj_index} 0 obj\n<< /Type /Page /Parent {len(objects)+3} 0 R /Resources << /Font << /F1 1 0 R >> >> /Contents {content_obj_index} 0 R /MediaBox [0 0 612 792] >>\nendobj\n".encode()
-                )
+    pdf_bytes += b"trailer\n<< /Size %d /Root 1 0 R >>\n" % (len(xref)+1)
+    pdf_bytes += b"startxref\n%d\n%%EOF\n" % xref_start
 
-                kids.append(f"{page_obj_index} 0 R")
-                page_number += 1
-                y = TOP_MARGIN
-                page_content = "BT\n/F1 12 Tf\n"
+    with open(output_file, 'wb') as out_pdf:
+        out_pdf.write(pdf_bytes)
 
-            safe_line = escape_pdf_text(line)
-            page_content += f"{LEFT_MARGIN} {y} Td ({safe_line}) Tj\n"
-            y -= LINE_HEIGHT
+    print(f"✅ PDF created: {output_file}")
 
-        # Write last page
-        page_content += "ET"
-        stream_bytes = page_content.encode('latin1')
-        length = len(stream_bytes)
-
-        content_obj_index = len(objects) + 1
-        page_obj_index = content_obj_index + 1
-
-        content_objects.append(f"{content_obj_index} 0 obj\n<< /Length {length} >>\nstream\n".encode())
-        content_objects.append(stream_bytes)
-        content_objects.append(b"\nendstream\nendobj\n")
-
-        page_objects.append(
-            f"{page_obj_index} 0 obj\n<< /Type /Page /Parent {len(objects)+3} 0 R /Resources << /Font << /F1 1 0 R >> >> /Contents {content_obj_index} 0 R /MediaBox [0 0 612 792] >>\nendobj\n".encode()
-        )
-
-        kids.append(f"{page_obj_index} 0 R")
-
-        # Pages object
-        kids_refs = " ".join(kids)
-        objects.extend(content_objects)
-        objects.extend(page_objects)
-
-        objects.append(f"{len(objects)+1} 0 obj\n<< /Type /Pages /Kids [{kids_refs}] /Count {len(kids)} >>\nendobj\n".encode())
-
-        # Catalog object
-        objects.append(f"{len(objects)+1} 0 obj\n<< /Type /Catalog /Pages {len(objects)} 0 R >>\nendobj\n".encode())
-
-        # Write objects
-        xref = []
-        offset = pdf_file.tell()
-        for obj in objects:
-            xref.append(offset)
-            pdf_file.write(obj)
-            offset = pdf_file.tell()
-
-        # Xref table
-        xref_start = offset
-        pdf_file.write(f"xref\n0 {len(xref)+1}\n0000000000 65535 f \n".encode())
-        for off in xref:
-            pdf_file.write(f"{off:010d} 00000 n \n".encode())
-
-        # Trailer
-        pdf_file.write(b"trailer\n<< /Size ")
-        pdf_file.write(f"{len(xref)+1} /Root {len(objects)} 0 R >>\nstartxref\n".encode())
-        pdf_file.write(f"{xref_start}\n%%EOF\n".encode())
-
-    print(f"✅ Clean PDF created successfully at {output_path}")
-
-# --- Main ---
+# Usage: python script.py input.txt output.pdf
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python txt_to_clean_pdf.py input.txt output.pdf")
-        sys.exit(1)
-
-    create_better_pdf(sys.argv[1], sys.argv[2])
-
-    
+        print("Usage: python txt_to_pdf.py input.txt output.pdf")
+    else:
+        txt_to_pdf(sys.argv[1], sys.argv[2])
