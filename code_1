@@ -1,7 +1,164 @@
-I have consistently prioritized risk awareness in my day-to-day activities. One key example is my involvement in documenting Python scripts to support their accurate conversion to Informatica, which reduced ambiguity and minimized potential misinterpretations of business logic—thereby mitigating the risk of downstream errors. Additionally, I proactively monitored the RSS mailbox and job failures in Frontier, ensuring that incidents were identified and escalated promptly, avoiding any disruption in critical financial processes.
+import sys
 
-I have made measurable progress towards driving operational excellence by streamlining key processes and ensuring consistent, high-quality outcomes. A major example is my work on documenting complex Python scripts to support their accurate and efficient transition to Informatica. This initiative reduced ambiguity, improved cross-team clarity, and minimized the risk of errors during migration. I also actively monitored the RSS mailbox and Frontier jobs, ensuring that failures were quickly identified and resolved—helping maintain smooth business operations. During weekend support, I took ownership of Out-of-Balance (OOB) issues and followed up proactively, which contributed to enhanced process stability and accountability. These efforts reflect my commitment to improving operational efficiency and maintaining strong controls.
+def escape_text(text):
+    return text.replace('\\', '\\\\').replace('(', '\\(').replace(')', '\\)')
 
-I consistently seek opportunities to expand my technical knowledge and apply learnings in real-world scenarios, demonstrating a growth mindset and a commitment to driving value beyond day-to-day responsibilities.
+def create_pdf(input_path, output_path):
+    with open(input_path, 'r') as txt_file:
+        lines = txt_file.readlines()
 
-Working here has truly been a rewarding experience, and I believe the organization fosters a culture that makes it a great place to work. The openness to ideas, access to learning opportunities, and encouragement to participate in innovation initiatives like the Campus Grad Hackathon have helped me grow both technically and professionally. I’ve also appreciated the collaborative environment—cross-team support during the Python-to-Informatica transition and regular knowledge-sharing discussions made it easy to learn and contribute meaningfully. Leadership is approachable, and the emphasis on inclusion and recognition makes employees feel valued. These experiences have reinforced my belief in the organization’s strong people-first culture.
+    with open(output_path, 'wb') as pdf:
+        # Start of PDF
+        pdf.write(b"%PDF-1.1\n")
+
+        objects = []
+        offsets = []
+
+        # 1. Font Object
+        font_obj = b"1 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>\nendobj\n"
+        objects.append(font_obj)
+
+        # 2. Content Stream
+        text_lines = "BT /F1 12 Tf 72 750 Td\n"
+        for line in lines:
+            line = line.rstrip()
+            escaped = escape_text(line)
+            text_lines += f"({escaped}) Tj\n0 -14 Td\n"
+        text_lines += "ET"
+        text_stream = text_lines.encode('latin1')
+        content_obj = b"2 0 obj\n<< /Length %d >>\nstream\n%s\nendstream\nendobj\n" % (len(text_stream), text_stream)
+        objects.append(content_obj)
+
+        # 3. Page Object
+        page_obj = b"3 0 obj\n<< /Type /Page /Parent 4 0 R /Contents 2 0 R /Resources << /Font << /F1 1 0 R >> >> >>\nendobj\n"
+        objects.append(page_obj)
+
+        # 4. Pages Object
+        pages_obj = b"4 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n"
+        objects.append(pages_obj)
+
+        # 5. Catalog
+        catalog_obj = b"5 0 obj\n<< /Type /Catalog /Pages 4 0 R >>\nendobj\n"
+        objects.append(catalog_obj)
+
+        # Write objects and track offsets
+        for obj in objects:
+            offsets.append(pdf.tell())
+            pdf.write(obj)
+
+        # xref table
+        xref_offset = pdf.tell()
+        pdf.write(f"xref\n0 {len(objects)+1}\n".encode())
+        pdf.write(b"0000000000 65535 f \n")
+        for offset in offsets:
+            pdf.write(f"{offset:010d} 00000 n \n".encode())
+
+        # trailer
+        pdf.write(b"trailer\n")
+        pdf.write(f"<< /Size {len(objects)+1} /Root 5 0 R >>\n".encode())
+        pdf.write(b"startxref\n")
+        pdf.write(f"{xref_offset}\n".encode())
+        pdf.write(b"%%EOF\n")
+
+    print(f"\n✅ Clean PDF generated at: {output_path}\n")
+
+# --- Main ---
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python txt_to_pdf_clean.py input.txt output.pdf")
+        sys.exit(1)
+
+    create_pdf(sys.argv[1], sys.argv[2])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import sys
+
+def create_clean_pdf(input_path, output_path):
+    with open(input_path, 'r') as txt_file:
+        lines = txt_file.readlines()
+
+    with open(output_path, 'wb') as pdf_file:
+        # PDF Header
+        pdf_file.write(b"%PDF-1.1\n")
+        pdf_objects = []
+
+        # Text content
+        y = 750
+        content = "BT\n/F1 12 Tf\n"
+        for line in lines:
+            line = line.strip().replace("(", "\\(").replace(")", "\\)")
+            content += f"72 {y} Td ({line}) Tj\n"
+            y -= 14
+        content += "ET"
+
+        content_bytes = content.encode("latin1")
+        content_length = len(content_bytes)
+
+        # Object 1: Font
+        pdf_objects.append(b"1 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n")
+
+        # Object 2: Content Stream
+        pdf_objects.append(f"2 0 obj\n<< /Length {content_length} >>\nstream\n".encode())
+        pdf_objects.append(content_bytes)
+        pdf_objects.append(b"\nendstream\nendobj\n")
+
+        # Object 3: Page
+        pdf_objects.append(b"3 0 obj\n<< /Type /Page /Parent 4 0 R /Resources << /Font << /F1 1 0 R >> >> /Contents 2 0 R >>\n/MediaBox [0 0 612 792] >>\nendobj\n")
+
+        # Object 4: Pages
+        pdf_objects.append(b"4 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n")
+
+        # Object 5: Catalog
+        pdf_objects.append(b"5 0 obj\n<< /Type /Catalog /Pages 4 0 R >>\nendobj\n")
+
+        # Write objects
+        xref = []
+        start = pdf_file.tell()
+        for obj in pdf_objects:
+            xref.append(start)
+            pdf_file.write(obj)
+            start = pdf_file.tell()
+
+        # Xref Table
+        xref_start = start
+        pdf_file.write(f"xref\n0 {len(xref)+1}\n0000000000 65535 f \n".encode())
+        for offset in xref:
+            pdf_file.write(f"{offset:010d} 00000 n \n".encode())
+
+        # Trailer
+        pdf_file.write(b"trailer\n<< /Size 6 /Root 5 0 R >>\nstartxref\n")
+        pdf_file.write(f"{xref_start}\n%%EOF\n".encode())
+
+    print(f"✅ PDF created successfully: {output_path}")
+
+# --- Main Execution ---
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python txt_to_pdf_clean.py input.txt output.pdf")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+    create_clean_pdf(input_file, output_file)
