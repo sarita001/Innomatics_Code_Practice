@@ -1,67 +1,30 @@
-• ARC Exercise – Informatica DR Switch
-Switching to DR environment to run production processing for a week, ensuring disaster recovery readiness.
-• CERT Staging Table Alert Update
-Rescheduling the alert job to run after AA load to ensure accurate and timely validation.
-• DFR CABL GIN File Parallel Validation
-Rebuilding CABL GIN file logic in Informatica and validating outputs against existing Python files.
-• FED_CIB030 Duplicate Check
-Implementing posting date-based deduplication to prevent duplicate FED record loads.
-• FIRD 7-Day Processing
-Updating schedule to process FIRD files daily, in line with Federal Reserve’s 7-day delivery.
-• FX Rate Load Schedule Update
-Changing FX rate load to run on last calendar day instead of last business day for BD5 accuracy.
-• GCO Report Updates
-Adding record identifier to GCO report to support downstream enrichment and tracking.
-• Inactive CERT User Email Automation
-Migrating email alert logic for inactive users from Python to Informatica for automation.
-• Closed User Table Update Procedure
-Creating ad-hoc process to allow APS to update SysUser status in Frontier securely.
-• Vault Password Rotation
-Rotating DB credentials as per RISE intake and validating Informatica job connectivity.
+Objective:
+Implement multiple Informatica enhancements and schedule updates to improve data accuracy, process alignment, reporting quality, and compliance.
+
+Rationale:
+Align CERT alerts with load timing, convert Python logic to Informatica, prevent duplicate FED records, support daily FIRD files including holidays, update FX schedule, enrich GCO reports, automate inactive user notifications, correct Frontier user statuses, and complete required password rotations.
+
+Outcome:
+All changes deployed successfully. Alerts run post-load, Informatica outputs validated, duplicates eliminated, FIRD processed daily with bundling, FX loaded on correct date, GCO includes identifiers, user emails automated, statuses corrected, and credentials rotated with successful validation.
 
 
 
+Impacted Area
+The impacted areas include Informatica workflows, CERT staging tables and alerts, DFR CABL GIN file processing, FED_CIB030 logic, FIRD daily and holiday file handling, FX rate load schedule for BD5, GCO reporting, CERT inactive user notification, Frontier user status updates, and vault password configurations for Informatica and Certification databases.
 
-Given the set of updates across Informatica workflows, schedules, and system integrations,
-When the changes are implemented as per the design specifications,
-Then
-	• DR processing should run successfully for one week without failures, validating disaster recovery readiness.
-	• CERT alert job should trigger only after AA load completion, ensuring accurate validation.
-	• Informatica-generated CABL GIN files should match Python outputs exactly, confirming logic parity.
-	• FED_CIB030 duplicate records based on posting date should be excluded from the final load.
-	• FIRD files should be processed daily, including weekends/holidays, with correct bundling logic.
-	• FX rate load should execute on the last calendar day, reflecting accurate data in downstream reports.
-	• GCO report should include a record identifier and pass enrichment validations.
-	• Inactive CERT user emails should be sent via Informatica with correct user identification.
-	• APS should be able to update SysUser status using the ad-hoc process, with successful audit logging.
-	• Vault password updates should not impact job execution; all connections must remain valid post-change.
-	
-	
-	
-	
-Technical Change Summary
-	• Switch production processing to the Informatica Disaster Recovery environment for one week to validate DR readiness.
-	• Reschedule the CERT alert job to run after AA load for proper validation sequencing.
-	• Rebuild CABL GIN file logic in Informatica and validate it against Python output in parallel.
-	• Implement posting date–based duplicate filtering in FED_CIB030 load process.
-	• Enable daily (7-day) FIRD file processing, including logic for handling holiday file bundling.
-	• Update FX rate load to run on the last calendar day of the month instead of the last business day.
-	• Add a unique record identifier to the GCO report to support data enrichment and traceability.
-	• Convert inactive CERT user email logic from Python to Informatica for automated notifications.
-	• Develop an ad-hoc Informatica utility for APS to update SysUser statuses in Frontier.
-	• Rotate Vault passwords for Informatica and Certification DBs as part of RISE intake 1761.
+Impacted Description
+Python processes for DFR and CERT user notifications were migrated to Informatica. CERT alert timing was corrected to run post data load. FED_CIB030 logic was updated to prevent duplicates using posting date. FIRD processing was enhanced to handle daily files and bundle holiday ones. FX rate load was rescheduled to run on the last calendar day. GCO reports now include a record identifier for enrichment. APS was provided a procedure to update Frontier user statuses, and vault credentials were rotated for Informatica and Certification DBs with validations completed.
 
+Dependent Area
+Dependent areas include upstream data feeds to CERT and FED_CIB030 jobs, Frontier database tables, APS support processes, GCO downstream consumers, FX and FIRD file delivery from external systems, Informatica scheduling, vault secret management systems, and security group email configurations.
 
-Deployment Success / Exit Criteria
-	• DR environment processes production workflows for 7 consecutive days without errors or missed SLAs.
-	• CERT alert job consistently triggers after AA load completion with no timing conflicts.
-	• Informatica-generated CABL GIN files match Python outputs exactly in content and structure.
-	• FED_CIB030 duplicate records based on posting date are successfully filtered out during load.
-	• FIRD files are processed correctly each day, including weekends and holidays, with accurate bundling.
-	• FX rate load job runs on the last calendar day and reflects correct data in downstream outputs.
-	• GCO report includes the new record identifier, and all enrichment validations pass.
-	• Email notifications for inactive CERT users are triggered correctly via Informatica logic.
-	• APS successfully executes the ad-hoc SysUser update process with changes reflected in Frontier.
-	• All Informatica and Certification DB jobs run successfully post Vault password rotation.
-	
+Dependent Description
+CERT alert updates depend on timely completion of upstream data loads. FED_CIB030 changes rely on accurate posting date data from source files. Frontier user status updates require APS coordination. GCO report changes impact downstream systems consuming enriched reports. FX and FIRD processing rely on timely external file deliveries. Informatica job schedules must align with operational timing requirements. Vault password rotation depends on secret management tools and requires coordinated updates to all affected services. CERT user email notifications depend on accurate user group mappings and SMTP configurations.
+
+Risk Description
+There is a risk of CERT alerts misfiring due to delayed upstream loads, and data mismatches if Informatica conversions are not properly validated. FED duplicate logic may cause data duplication or loss if incorrectly applied. FIRD holiday handling may lead to missing or repeated files. FX schedule changes could impact BD5 processing. GCO report updates may break downstream dependencies. Vault password rotation without coordination may disrupt job connectivity. APS execution errors could update incorrect user statuses, and CERT email logic may fail due to SMTP misconfigurations.
+
+Risk Mitigation Plan
+All job dependencies and alert timings will be validated in lower environments. Informatica outputs will be verified through parallel runs. FED logic will be tested with varied posting dates. FIRD scenarios, including holidays, will be simulated in UAT. FX changes will be aligned with business expectations. GCO consumers will be notified in advance and provided with updated formats. Vault rotations will be scheduled with rollback steps in place. APS scripts will be tested before production use, and SMTP configurations will be validated with end-to-end email testing.
+
 
