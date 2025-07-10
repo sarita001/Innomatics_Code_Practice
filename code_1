@@ -1,77 +1,67 @@
-import sys
+• ARC Exercise – Informatica DR Switch
+Switching to DR environment to run production processing for a week, ensuring disaster recovery readiness.
+• CERT Staging Table Alert Update
+Rescheduling the alert job to run after AA load to ensure accurate and timely validation.
+• DFR CABL GIN File Parallel Validation
+Rebuilding CABL GIN file logic in Informatica and validating outputs against existing Python files.
+• FED_CIB030 Duplicate Check
+Implementing posting date-based deduplication to prevent duplicate FED record loads.
+• FIRD 7-Day Processing
+Updating schedule to process FIRD files daily, in line with Federal Reserve’s 7-day delivery.
+• FX Rate Load Schedule Update
+Changing FX rate load to run on last calendar day instead of last business day for BD5 accuracy.
+• GCO Report Updates
+Adding record identifier to GCO report to support downstream enrichment and tracking.
+• Inactive CERT User Email Automation
+Migrating email alert logic for inactive users from Python to Informatica for automation.
+• Closed User Table Update Procedure
+Creating ad-hoc process to allow APS to update SysUser status in Frontier securely.
+• Vault Password Rotation
+Rotating DB credentials as per RISE intake and validating Informatica job connectivity.
 
-def escape_text(text):
-    return text.replace('\\', '\\\\').replace('(', '\\(').replace(')', '\\)')
 
-def wrap_line(line, max_chars):
-    """Wraps a line into chunks of max_chars."""
-    return [line[i:i+max_chars] for i in range(0, len(line), max_chars)]
 
-def create_pdf(input_path, output_path):
-    with open(input_path, 'r') as txt_file:
-        lines = txt_file.readlines()
 
-    with open(output_path, 'wb') as pdf:
-        # Start of PDF
-        pdf.write(b"%PDF-1.7\n")  # Updated version
+Given the set of updates across Informatica workflows, schedules, and system integrations,
+When the changes are implemented as per the design specifications,
+Then
+	• DR processing should run successfully for one week without failures, validating disaster recovery readiness.
+	• CERT alert job should trigger only after AA load completion, ensuring accurate validation.
+	• Informatica-generated CABL GIN files should match Python outputs exactly, confirming logic parity.
+	• FED_CIB030 duplicate records based on posting date should be excluded from the final load.
+	• FIRD files should be processed daily, including weekends/holidays, with correct bundling logic.
+	• FX rate load should execute on the last calendar day, reflecting accurate data in downstream reports.
+	• GCO report should include a record identifier and pass enrichment validations.
+	• Inactive CERT user emails should be sent via Informatica with correct user identification.
+	• APS should be able to update SysUser status using the ad-hoc process, with successful audit logging.
+	• Vault password updates should not impact job execution; all connections must remain valid post-change.
+	
+	
+	
+	
+Technical Change Summary
+	• Switch production processing to the Informatica Disaster Recovery environment for one week to validate DR readiness.
+	• Reschedule the CERT alert job to run after AA load for proper validation sequencing.
+	• Rebuild CABL GIN file logic in Informatica and validate it against Python output in parallel.
+	• Implement posting date–based duplicate filtering in FED_CIB030 load process.
+	• Enable daily (7-day) FIRD file processing, including logic for handling holiday file bundling.
+	• Update FX rate load to run on the last calendar day of the month instead of the last business day.
+	• Add a unique record identifier to the GCO report to support data enrichment and traceability.
+	• Convert inactive CERT user email logic from Python to Informatica for automated notifications.
+	• Develop an ad-hoc Informatica utility for APS to update SysUser statuses in Frontier.
+	• Rotate Vault passwords for Informatica and Certification DBs as part of RISE intake 1761.
 
-        objects = []
-        offsets = []
 
-        # 1. Font Object
-        font_obj = b"1 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>\nendobj\n"
-        objects.append(font_obj)
+Deployment Success / Exit Criteria
+	• DR environment processes production workflows for 7 consecutive days without errors or missed SLAs.
+	• CERT alert job consistently triggers after AA load completion with no timing conflicts.
+	• Informatica-generated CABL GIN files match Python outputs exactly in content and structure.
+	• FED_CIB030 duplicate records based on posting date are successfully filtered out during load.
+	• FIRD files are processed correctly each day, including weekends and holidays, with accurate bundling.
+	• FX rate load job runs on the last calendar day and reflects correct data in downstream outputs.
+	• GCO report includes the new record identifier, and all enrichment validations pass.
+	• Email notifications for inactive CERT users are triggered correctly via Informatica logic.
+	• APS successfully executes the ad-hoc SysUser update process with changes reflected in Frontier.
+	• All Informatica and Certification DB jobs run successfully post Vault password rotation.
+	
 
-        # 2. Content Stream (with wrapping and smaller font)
-        text_lines = "BT /F1 8 Tf 72 800 Td\n"  # Start at top with 8pt font
-        for line in lines:
-            line = line.rstrip()
-            wrapped_lines = wrap_line(line, 85)  # Adjust max_chars for width
-            for wline in wrapped_lines:
-                escaped = escape_text(wline)
-                text_lines += f"({escaped}) Tj\n0 -10 Td\n"  # Move to next line
-        text_lines += "ET"
-        text_stream = text_lines.encode('latin1')
-        content_obj = b"2 0 obj\n<< /Length %d >>\nstream\n%s\nendstream\nendobj\n" % (len(text_stream), text_stream)
-        objects.append(content_obj)
-
-        # 3. Page Object
-        page_obj = b"3 0 obj\n<< /Type /Page /Parent 4 0 R /Contents 2 0 R /Resources << /Font << /F1 1 0 R >> >> >>\nendobj\n"
-        objects.append(page_obj)
-
-        # 4. Pages Object
-        pages_obj = b"4 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n"
-        objects.append(pages_obj)
-
-        # 5. Catalog
-        catalog_obj = b"5 0 obj\n<< /Type /Catalog /Pages 4 0 R >>\nendobj\n"
-        objects.append(catalog_obj)
-
-        # Write objects and track offsets
-        for obj in objects:
-            offsets.append(pdf.tell())
-            pdf.write(obj)
-
-        # xref table
-        xref_offset = pdf.tell()
-        pdf.write(f"xref\n0 {len(objects)+1}\n".encode())
-        pdf.write(b"0000000000 65535 f \n")
-        for offset in offsets:
-            pdf.write(f"{offset:010d} 00000 n \n".encode())
-
-        # trailer
-        pdf.write(b"trailer\n")
-        pdf.write(f"<< /Size {len(objects)+1} /Root 5 0 R >>\n".encode())
-        pdf.write(b"startxref\n")
-        pdf.write(f"{xref_offset}\n".encode())
-        pdf.write(b"%%EOF\n")
-
-    print(f"\n✅ Clean PDF generated at: {output_path}\n")
-
-# --- Main ---
-if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python txt_to_pdf_clean.py input.txt output.pdf")
-        sys.exit(1)
-
-    create_pdf(sys.argv[1], sys.argv[2])
