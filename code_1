@@ -1,4 +1,13 @@
-Objective:
+
+
+
+
+
+
+
+
+
+This change includes multiple Informatica enhancements and schedule adjustments to improve data quality, process automation, reporting, and compliance. It covers conversion of Python logic to Informatica for DFR CABL GIN files and CERT inactive user emails, correction of CERT alert timing to follow data loads, implementation of posting date-based duplicate checks in FED_CIB030, support for daily and holiday-based FIRD processing, rescheduling of FX rate load to the last calendar day, enrichment of GCO reports with record identifiers, updates to Frontier user statuses via APS, and vault password rotations for Informatica and Certification databases with validation.Objective:
 Implement multiple Informatica enhancements and schedule updates to improve data accuracy, process alignment, reporting quality, and compliance.
 
 Rationale:
