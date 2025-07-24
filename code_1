@@ -1,19 +1,9 @@
-Validated Disaster Recovery readiness by running production processing in the Informatica DR environment for one week.
-
-Improved job dependency management by rescheduling the CERT alert to run after the AA load.
-
-Rebuilt and validated CABL GIN file generation in Informatica to match the existing Python output.
-
-Ensured data accuracy in the FED_CIB030 load by implementing posting date–based duplicate filtering.
-
-Enabled 7-day FIRD file processing, including holiday file bundling logic.
-
-Updated the FX rate load schedule to run on the last calendar day of the month.
-
-Enhanced GCO reporting with unique record identifiers to support traceability and data enrichment.
-
-Automated inactive CERT user email notifications by migrating logic from Python to Informatica.
-
-Delivered a new ad-hoc Informatica utility for APS to manage SysUser status updates in Frontier.
-
-Strengthened system security by rotating Vault passwords for Informatica and Certification DBs under RISE intake 1761.
+Rescheduled CERT alert to follow AA load for correct sequencing.
+	•	Rebuilt CABL GIN logic in Informatica and validated output against Python.
+	•	Implemented posting date–based duplicate filtering in FED_CIB030.
+	•	Enabled daily FIRD processing with holiday bundling logic.
+	•	Updated FX rate load to trigger on the last calendar day.
+	•	Added unique record ID to GCO report for traceability.
+	•	Migrated inactive CERT user email logic from Python to Informatica.
+	•	Delivered ad-hoc Informatica utility for APS to update SysUser status in Frontier.
+	•	Rotated Vault passwords for Informatica and Certification DBs under RISE intake 1761.
