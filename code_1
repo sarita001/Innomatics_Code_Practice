@@ -1,9 +1,43 @@
-Rescheduled CERT alert to follow AA load for correct sequencing.
-	•	Rebuilt CABL GIN logic in Informatica and validated output against Python.
-	•	Implemented posting date–based duplicate filtering in FED_CIB030.
-	•	Enabled daily FIRD processing with holiday bundling logic.
-	•	Updated FX rate load to trigger on the last calendar day.
-	•	Added unique record ID to GCO report for traceability.
-	•	Migrated inactive CERT user email logic from Python to Informatica.
-	•	Delivered ad-hoc Informatica utility for APS to update SysUser status in Frontier.
-	•	Rotated Vault passwords for Informatica and Certification DBs under RISE intake 1761.
+Current Process Overheads
+
+Repetitive back-and-forth with users for simple data errors.
+
+Manual validations in Python for issues that could be preemptively caught in Excel.
+
+Validation Optimization
+
+Shift basic validations (e.g., empty cells, format checks) to Excel macros.
+
+Retain advanced validations (requiring database access) in Python scripts.
+
+➤ Benefit: Faster turnaround time and reduced dependency on tech team.
+
+Dynamic Updates via API
+
+Exploring the use of the Frontier API for item updates.
+
+If viable, implement an Excel plugin/macro with a “Submit” button that:
+
+Pushes updates instantly via API.
+
+Captures audit logs for traceability.
+
+Eliminates the need for batch scheduling.
+
+User Template Standardization
+
+Proposal to roll out a standardized Excel template across users with:
+
+Predefined structure
+
+Embedded macros for validations
+
+Access Ownership
+
+Only our team (Team 33) is authorized to make changes to common views in Frontier.
+
+FieldTable is a sensitive component requiring restricted modifications.
+
+Upcoming Developments
+
+A new version of Frontier is expected to be available in dev within 10–15 days, post which testing can be initiated.
