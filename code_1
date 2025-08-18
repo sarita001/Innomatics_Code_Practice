@@ -1,4 +1,16 @@
-Objective
+As much as processes and technology drive our success, it’s the people behind them who truly make the difference. Employee engagement is at the heart of our team culture. It’s about collaboration, support, and celebrating milestones together.”
+
+Body
+*“In Quarter 1 of 2025, we brought this spirit to life through a series of monthly themes and activities across locations.
+	•	Self-Care February focused on wellness with meditation sessions and fun-filled games.
+	•	We enjoyed team lunches, which gave us space to bond beyond work.
+	•	Our festival celebrations brought color, joy, and inclusivity to our floors.
+	•	Through storytelling sessions and success-sharing mailers, we celebrated individual achievements and inspired one another.
+
+Each of these moments strengthened our connection as a team and created a workplace where everyone feels valued.”*
+
+Closing
+“Employee engagement is not just an initiative—it’s our culture. With this energy and togetherness, we are ready to make the rest of 2025 even more meaningful, as one strong and united team.”
 Streamline global financial data processing by migrating key Frontier processes to Informatica, enhancing automation, and improving reporting and notification workflows.
 
 Rationale
@@ -7,7 +19,7 @@ Ensure timely, accurate, and complete data processing across regions by reducing
 Outcome
 Critical processes (MFTD, BIFOUT, CABLEIN) running in parallel on Informatica, updated notifications with RSS mailbox, new Frontier company setup, full TRADS/SWIFT/GBS integration for APAC recon, accurate GIN reference logic, inclusion of write-offs, automated holiday/weekend bundling for Fed/LIQ files, and enhanced reporting through new tables, views, and security groups.
 
-Impacted Area
+Impacted Area to
 Changes affect Frontier, Informatica, file feed scheduling, and reporting. Frontier updates include new company setup, enhanced reconciliation, corrected GIN logic, and inclusion of write-offs. Informatica covers migration and parallel runs of MFTD, BIFOUT, and CABLEIN, plus creation of a Federal Reserve code table. Scheduling changes add automated Fed and LIQ bundling for weekends/holidays. Reporting improvements include a TEBS balance view and security groups for controlled access.
 
 Impacted Description
