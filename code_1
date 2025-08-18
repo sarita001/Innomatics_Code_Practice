@@ -1,38 +1,13 @@
-As much as processes and technology drive our success, it’s the people behind them who truly make the difference. Employee engagement is at the heart of our team culture. It’s about collaboration, support, and celebrating milestones together.”
-
-Body
-*“In Quarter 1 of 2025, we brought this spirit to life through a series of monthly themes and activities across locations.
-	•	Self-Care February focused on wellness with meditation sessions and fun-filled games.
-	•	We enjoyed team lunches, which gave us space to bond beyond work.
-	•	Our festival celebrations brought color, joy, and inclusivity to our floors.
-	•	Through storytelling sessions and success-sharing mailers, we celebrated individual achievements and inspired one another.
-
-Each of these moments strengthened our connection as a team and created a workplace where everyone feels valued.”*
-
-Closing
-“Employee engagement is not just an initiative—it’s our culture. With this energy and togetherness, we are ready to make the rest of 2025 even more meaningful, as one strong and united team.”
-Streamline global financial data processing by migrating key Frontier processes to Informatica, enhancing automation, and improving reporting and notification workflows.
-
-Rationale
-Ensure timely, accurate, and complete data processing across regions by reducing manual steps, handling holiday/weekend feeds, and expanding reporting access.
-
-Outcome
-Critical processes (MFTD, BIFOUT, CABLEIN) running in parallel on Informatica, updated notifications with RSS mailbox, new Frontier company setup, full TRADS/SWIFT/GBS integration for APAC recon, accurate GIN reference logic, inclusion of write-offs, automated holiday/weekend bundling for Fed/LIQ files, and enhanced reporting through new tables, views, and security groups.
-
-Impacted Area to
-Changes affect Frontier, Informatica, file feed scheduling, and reporting. Frontier updates include new company setup, enhanced reconciliation, corrected GIN logic, and inclusion of write-offs. Informatica covers migration and parallel runs of MFTD, BIFOUT, and CABLEIN, plus creation of a Federal Reserve code table. Scheduling changes add automated Fed and LIQ bundling for weekends/holidays. Reporting improvements include a TEBS balance view and security groups for controlled access.
-
-Impacted Description
-Enhancements expand Frontier capabilities, improve reconciliation accuracy, and ensure complete data feeds. Informatica migration boosts automation and global process consistency. Automated bundling prevents weekend/holiday data loss, while reporting and access updates improve availability, security, and quality of information for users.
+Dependency Category: Technology
 
 Dependent Area
-Frontier processing, Informatica workflows, reconciliation processes, reporting systems, and scheduling modules.
+The dependent areas are Frontier, Informatica, and Feeds/Reporting.
 
 Dependent Description
-Frontier relies on new company setup, updated logic, and integrated file inputs to process data accurately. Informatica workflows depend on migrated and tested regional processes to ensure consistent global operation. Reconciliation accuracy depends on timely availability of complete file feeds. Reporting systems depend on the new tables, views, and security groups to deliver accurate and secure data access. Scheduling modules depend on updated bundling jobs to handle weekend/holiday processing without data loss.
+The Frontier dependency lies in existing notification and company setup capabilities. Enhancements depend on Frontier’s ability to add recipients for certification scheduler alerts, create new companies with accounts and jobs, and notify users when imports are complete. In Informatica, dependencies include job scheduling and workflow execution to handle the migration of maintenance emails from Frontier, implementation of new processes (MFTD, BIFOUT, CABLEIN) in parallel runs, and logic updates for GIN reference construction, write-off handling, and Federal Reserve code table integration. For Feeds/Reporting, dependencies include the availability and integration of external file feeds (TRADS, SWIFT, GBS, Fed, and LIQ) into APAC Recon, as well as reporting infrastructure for creating security groups and enabling new views to access TEBS balances.
 
-Risk Description
-Migration of critical processes (MFTD, BIFOUT, CABLEIN) to Informatica and updates to Frontier logic may cause processing errors, reconciliation mismatches, or missed file feeds if configurations or schedules are incorrect. Automated bundling changes carry the risk of incomplete or duplicate data during weekends/holidays. Reporting enhancements may face access issues if security groups or views are misconfigured.
+Impacted Area
+The impacted areas are Frontier, Informatica, and Feeds/Reporting.
 
-Risk Mitigation Plan
-Run extended parallel testing for all migrated processes to validate outputs against existing production results. Validate bundling jobs across multiple weekend/holiday scenarios before go-live. Implement step-by-step configuration reviews, peer testing, and scheduler validation to avoid missed or duplicate files. Perform controlled rollout of reporting changes with user acceptance testing to confirm correct access and data accuracy. Maintain rollback plans for each process to revert quickly if errors occur.
+Impacted Description
+In Frontier, impact includes adding RSS mailbox recipients for scheduler failure alerts, creating a new company with accounts and jobs, and notifying users once imports complete. In Informatica, maintenance emails are migrated from Frontier, new processes (MFTD, BIFOUT, CABLEIN) are implemented with parallel runs, and logic updates improve GIN reference construction, write-off handling, and Federal Reserve reporting support. In Feeds/Reporting, TRADS, SWIFT, and GBS files are added to APAC Recon, Fed and LIQ feeds are bundled to handle weekends and holidays, security groups are introduced for access control, and a new view enables TEBS balance reporting.
