@@ -1,15 +1,26 @@
+Objective
 
-Deployment will be considered successful if the following criteria are met:
+Implement DFR APAC enhancements in Informatica, Frontier, and OBIEE to automate access, streamline feed processing, and improve reconciliation and notifications in UAT and Production.
 
-OBIEE Access Provisioning – DFR APAC users are provisioned correctly via AD (Active Directory) groups after the weekday batch runs.
+Rationale
 
-File Processing – GBS, TRADS, SWIFT feeds sent from Informatica are imported into Frontier NAS and reconciled successfully in DFR APAC.
+These updates reduce manual effort, improve data accuracy, and enhance user experience. Automated OBIEE access ensures secure provisioning, reliable file processing supports financial integrity, and notifications give users visibility into reconciliation status.
 
-Feed Transmission – Informatica processes IMSJ/P/M feeds and transmits output files to NASPATH RECON without errors.
+Outcome
 
-Notifications – Users receive automated email alerts when the DFR APAC match process starts and completes in Frontier.
+OBIEE provisions access for DFR APAC users via AD groups after scheduled batch runs.
 
-No Errors in Logs – Informatica and Frontier job logs show successful completion with no critical errors.
+GBS, TRADS, and SWIFT files are processed in Informatica, imported into Frontier NAS, and reconciled in DFR APAC.
 
-UAT Sign-off – UAT results confirm expected outcomes and Production validation is completed by business users.
+Informatica processes IMSJ/P/M feeds and transmits outputs to NASPATH RECON without errors.
 
+Users receive automated emails when the DFR APAC match process starts and completes.
+
+
+Risk Description
+
+Deployment of DFR APAC changes in Informatica, Frontier, and OBIEE may cause risks such as incorrect OBIEE access via AD groups, failures in processing GBS/TRADS/SWIFT/IMSJ-P-M feeds, missed Frontier notifications, or system instability, leading to access issues, data gaps, or reconciliation delays.
+
+Risk Mitigation Plan
+
+Validate AD groups and OBIEE access in UAT, cross-check Informatica outputs with Python, enable job/notification monitoring, retain backup files for reprocessing, communicate timelines to users, provide hypercare support, and keep rollback plans ready for quick recovery.
