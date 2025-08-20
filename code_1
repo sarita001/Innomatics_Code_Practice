@@ -1,6 +1,15 @@
-Given
-The set of updates across Informatica workflows, schedules, and system integrations,
 
-When
-the updated Informatica workflows are successfully migrated to production, the revised schedules are enabled, and the integrated jobs are executed with production data under the new design specifications — including file generation, notification triggers, data transformations, holiday/weekend handling, and reporting table creation —
+Deployment will be considered successful if the following criteria are met:
+
+OBIEE Access Provisioning – DFR APAC users are provisioned correctly via AD (Active Directory) groups after the weekday batch runs.
+
+File Processing – GBS, TRADS, SWIFT feeds sent from Informatica are imported into Frontier NAS and reconciled successfully in DFR APAC.
+
+Feed Transmission – Informatica processes IMSJ/P/M feeds and transmits output files to NASPATH RECON without errors.
+
+Notifications – Users receive automated email alerts when the DFR APAC match process starts and completes in Frontier.
+
+No Errors in Logs – Informatica and Frontier job logs show successful completion with no critical errors.
+
+UAT Sign-off – UAT results confirm expected outcomes and Production validation is completed by business users.
 
