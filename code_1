@@ -1,3 +1,6 @@
+GIVEN Informatica sends GBS, TRADS, and SWIFT files to Frontier NAS
+WHEN Frontier imports these files into DFR APAC
+THEN record counts and key fields (Txn ID, Account, Amount, Date, Currency) reconcile successfully between source files and DFR APAC
 Objective
 
 Implement DFR APAC enhancements in Informatica, Frontier, and OBIEE to automate access, streamline feed processing, and improve reconciliation and notifications in UAT and Production.
