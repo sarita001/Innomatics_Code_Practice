@@ -1,8 +1,13 @@
-GIVEN Informatica sends GBS, TRADS, and SWIFT files to Frontier NAS
-WHEN Frontier imports these files into DFR APAC
-THEN record counts and key fields (Txn ID, Account, Amount, Date, Currency) reconcile successfully between source files and DFR APAC
-Objective
-
+Added RSS mailbox for Certification scheduler failure notifications.
+	•	Migrated maintenance deadline emails from Frontier to Informatica.
+	•	Implemented MFTD, BIFOUT, and CABLEIN processes in Informatica with parallel runs.
+	•	Created new Frontier company with accounts, jobs, and match passes.
+	•	Enabled user notifications upon Frontier import completion.
+	•	Integrated TRADS, SWIFT, and GBS files into APAC Recon.
+	•	Updated logic to construct GIN references and include write-offs in matched groups.
+	•	Built Informatica table for Federal Reserve code descriptions.
+	•	Implemented Fed feed bundling for weekends/holidays and adjusted LIQ schedule for Christmas/New Year.
+	•	Created security groups for reporting access and a view for TEBS balance reporting.
 Implement DFR APAC enhancements in Informatica, Frontier, and OBIEE to automate access, streamline feed processing, and improve reconciliation and notifications in UAT and Production.
 
 Rationale
