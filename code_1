@@ -1,3 +1,25 @@
+•	DFR APAC updates deployed to support regional go-live.
+	•	Certification process enhanced for improved efficiency.
+	•	Subaccount Rule integrated into daily file generation for accurate pre-assignment.
+	•	Data retention and file transmission improvements implemented.
+	•	Informatica DFR APAC jobs and batch processes successfully deployed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Added RSS mailbox for Certification scheduler failure notifications.
 	•	Migrated maintenance deadline emails from Frontier to Informatica.
 	•	Implemented MFTD, BIFOUT, and CABLEIN processes in Informatica with parallel runs.
