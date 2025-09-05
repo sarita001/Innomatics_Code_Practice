@@ -2,9 +2,9 @@
 	•	Certification process enhanced for improved efficiency.
 	•	Subaccount Rule integrated into daily file generation for accurate pre-assignment.
 	•	Data retention and file transmission improvements implemented.
-	•	Informatica DFR APAC jobs and batch processes successfully deployed.
-
-
+	•	Informatica DFR APAC jobs and batch processes successfully 	•	GIVEN the ARC failover exercise scheduled in September,
+	•	WHEN the application is switched from Production to the Disaster Recovery (DR) contingency environment and the Production system is brought offline,
+	•	THEN the application will run on contingency servers until business validations are successfully completed, after which it will be switched back to Production.
 
 
 
