@@ -1,3 +1,13 @@
+To conduct the ARC exercise for the Frontier Finance application by switching from the Production environment to the Frontier Disaster Recovery (DR) contingency environment. During this period, Production will be brought offline and the application will operate on contingency servers for 5 days until business validation is complete. After successful completion, the application will be switched back to the Production environment, thereby completing the ARC exercise.
+
+
+
+
+
+
+
+
+
 GIVEN the ARC failover activity for the Frontier Finance application,
 WHEN Production services are brought down and the application is switched over to the Disaster Recovery (DR) environment,
 THEN users should be able to log in successfully to the DR environment, and business sign-off will be provided upon completion of the failover activity.
