@@ -1,4 +1,18 @@
-•	DFR APAC updates deployed to support regional go-live.
+GIVEN the ARC failover activity for the Frontier Finance application,
+WHEN Production services are brought down and the application is switched over to the Disaster Recovery (DR) environment,
+THEN users should be able to log in successfully to the DR environment, and business sign-off will be provided upon completion of the failover activity.
+
+
+
+
+
+
+
+
+
+
+
+DFR APAC updates deployed to support regional go-live.
 	•	Certification process enhanced for improved efficiency.
 	•	Subaccount Rule integrated into daily file generation for accurate pre-assignment.
 	•	Data retention and file transmission improvements implemented.
