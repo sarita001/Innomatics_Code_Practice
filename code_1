@@ -1,3 +1,11 @@
+Given the ARC failback exercise is executed and Frontier BAU updates including DFR enhancements, FIRD Recon file transmissions and reporting view, SEPA import format, OBIEE view updates, and IIS password reset are deployed,
+When all production servers (application, web, database, MQ) run from the primary production environment, BAU processes execute, feeds load and automatching runs, SQL views support reporting, and password resets allow self-service transfers,
+Then the system functions as expected with no connectivity issues, all end-to-end workflows complete successfully, and production operates normally.
+
+
+
+
+
 The deployment includes the ARC switchback for Frontier Finance along with Frontier BAU items covering DFR enhancements, FIRD Recon transmissions and reporting view, SEPA import format, OBIEE view updates, and IIS password reset. All validations are complete and systems are running smoothly in production.
 
 To conduct the ARC exercise for the Frontier Finance application by switching from the Production environment to the Frontier Disaster Recovery (DR) contingency environment. During this period, Production will be brought offline and the application will operate on contingency servers for 5 days until business validation is complete. After successful completion, the application will be switched back to the Production environment, thereby completing the ARC exercise.
