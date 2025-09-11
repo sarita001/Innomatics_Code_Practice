@@ -1,3 +1,23 @@
+Add a distribution group to DFR APAC notification emails for improved alerting
+• Update the EMEA CABLEIN field type in the DFR Python process to accept all potential characters
+• Enhance DFR processes to include a fifth feed cycle
+• Run parallel validations for DFR GIN APAC LATAM and OBIEE view updates
+• Transmit mainframe FIRD files to Recon via Informatica
+• Create an SQL view to support Fed reporting and replace the legacy mainframe output
+• Implement SEPA import format to receive, load, and run automatching on consolidated item feeds, applying mapping updates and recollect templates if feeds fail to load
+• Update OBIEE views to support current reporting requirements
+• Implement password reset for IIS server and IN UI tool to enable self-service account transfers for approvers
+• Execute ARC Exercise 17570 for Frontier Finance, including switchback from contingency to production
+• Run primary production application, web, database, and MQ servers from the production environment
+• Validate end-to-end workflows, connectivity, and reporting to ensure production operates normally
+• Maintain backward compatibility and data integrity for all BAU and ARC processes
+
+
+
+
+
+
+
 Given the ARC failback exercise is executed and Frontier BAU updates including DFR enhancements, FIRD Recon file transmissions and reporting view, SEPA import format, OBIEE view updates, and IIS password reset are deployed,
 When all production servers (application, web, database, MQ) run from the primary production environment, BAU processes execute, feeds load and automatching runs, SQL views support reporting, and password resets allow self-service transfers,
 Then the system functions as expected with no connectivity issues, all end-to-end workflows complete successfully, and production operates normally.
