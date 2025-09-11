@@ -1,3 +1,27 @@
+The objective of this release is to deliver Frontier BAU updates following the successful completion of the Frontier ARC failback exercise.
+
+• Add a distribution group to the DFR APAC notification emails
+• Update the EMEA CABLEIN field type in the DFR CABLEIN Python process to allow all potential characters
+• Enhance DFR processes to support an additional cycle
+• Run parallel validations for DFR GIN APAC LATAM and DFR OBIEE view updates
+• Transmit mainframe FIRD files to Recon using Informatica
+• Create an SQL view to support Fed reporting and replace the legacy mainframe output
+• Enable password reset for the IIS server and IN UI tool to allow self-service account transfers for approvers
+• Run primary production application, web, database, and MQ servers from the primary production environment
+• Ensure no application connectivity issues when moving from contingency to production
+• Validate production to function as usual after the failback activity
+ All validations are successful and the systems run in production as expected
+
+
+
+
+
+
+
+
+
+
+
 To conduct the ARC exercise for the Frontier Finance application by switching from the Production environment to the Frontier Disaster Recovery (DR) contingency environment. During this period, Production will be brought offline and the application will operate on contingency servers for 5 days until business validation is complete. After successful completion, the application will be switched back to the Production environment, thereby completing the ARC exercise.
 
 
