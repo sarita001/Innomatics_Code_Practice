@@ -1,17 +1,19 @@
 The objective of this release is to deliver Frontier BAU updates following the successful completion of the Frontier ARC failback exercise.
 
-• Add a distribution group to the DFR APAC notification emails
-• Update the EMEA CABLEIN field type in the DFR CABLEIN Python process to allow all potential characters
-• Enhance DFR processes to support an additional cycle
-• Run parallel validations for DFR GIN APAC LATAM and DFR OBIEE view updates
-• Transmit mainframe FIRD files to Recon using Informatica
-• Create an SQL view to support Fed reporting and replace the legacy mainframe output
-• Enable password reset for the IIS server and IN UI tool to allow self-service account transfers for approvers
-• Run primary production application, web, database, and MQ servers from the primary production environment
-• Ensure no application connectivity issues when moving from contingency to production
-• Validate production to function as usual after the failback activity
- All validations are successful and the systems run in production as expected
+Add a distribution group to the DFR APAC notification emails
+Update the EMEA CABLEIN field type in the DFR CABLEIN Python process to allow all potential characters
+Enhance DFR processes to support an additional cycle
+Run parallel validations for DFR GIN APAC LATAM and DFR OBIEE view updates
+Transmit mainframe FIRD files to Recon via Informatica as part of FIRD Recon File Transmissions and CD Gateway Decommissioning
+Create an SQL view to facilitate Fed reporting and replace the legacy mainframe output under the FIRD Reporting View
+Implement SEPA import format as part of the GTS SEPA Instant project to receive, load, and run automatching on feeds related to consolidated items, with mapping updates and recollect templates applied if feeds fail to load
+Enable password reset for the IIS server and IN UI tool to allow self-service account transfers for approvers
+Execute ARC Exercise 17570 for Frontier Finance and complete switchback to production
+Run primary production application, web, database, and MQ servers from the primary production environment
+Ensure no application connectivity issues when moving from contingency to production
+Validate production to function as usual after the failback activity
 
+All validations are successful and the systems run in production as expected
 
 
 
