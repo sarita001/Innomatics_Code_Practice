@@ -1,19 +1,4 @@
-The deployment will be considered successful when the following conditions are met:
-
-• Primary production application, web, database, and MQ servers run from the primary production environment
-• DFR changes including APAC email update, CABLEIN Python update, fifth feed, and parallel validations are deployed successfully
-• FIRD Recon file transmissions run through Informatica without errors
-• The FIRD reporting view is created and supports Fed reporting while replacing the mainframe output
-• SEPA import format is implemented, feeds load correctly, and automatching works as expected with mapping updates and recollect templates if required
-• OBIEE view updates are validated successfully
-• ARC Exercise 17570 for Frontier Finance is executed successfully with switchback completed
-• Password reset for IIS server and IN UI tool works correctly for self-service account transfers
-• No application connectivity issues occur during the move from contingency to production
-• End-to-end application workflows are validated and production operates as usual after the failback activity
-
-
-
-
+The deployment includes the ARC switchback for Frontier Finance along with Frontier BAU items covering DFR enhancements, FIRD Recon transmissions and reporting view, SEPA import format, OBIEE view updates, and IIS password reset. All validations are complete and systems are running smoothly in production.
 
 To conduct the ARC exercise for the Frontier Finance application by switching from the Production environment to the Frontier Disaster Recovery (DR) contingency environment. During this period, Production will be brought offline and the application will operate on contingency servers for 5 days until business validation is complete. After successful completion, the application will be switched back to the Production environment, thereby completing the ARC exercise.
 
