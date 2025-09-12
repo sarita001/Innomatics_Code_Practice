@@ -1,3 +1,15 @@
+Sarita has been a key contributor in supporting the Frontier Finance application, ensuring seamless reconciliation and configuration efforts, while also collaborating closely with the Informatica and Unix technology teams. She extended her expertise to Python-to-Informatica conversion scripts, enabling smooth processing during planned upgrades, and contributed significantly to the POC for migration from Content Navigator to Content Suite. She also developed Python scripts to automate file generation and upload to Content Suite, ensuring efficiency and reliability. Alongside this, she consistently supports critical activities such as month-end closures, daily and weekend job monitoring.
+
+Over the past year, Sarita has strengthened her technical expertise across Python, Informatica, Tableau, shell scripting, API testing, and played a pivotal role in the RHEL9 upgrade for Frontier. She has also taken on additional responsibilities as Change Coordinator, successfully delivering numerous CRQs for planned releases, and earning appreciation from the CIO and GBS leadership team multiple times.
+
+Sarita’s passion for innovation sets her apart. As a Hackathon Champion, she actively contributes to the GFT Patent Cluster and Innovation initiatives, guiding team members on logging and progressing SpeakUp, Dollar Save, and SB ideas, and partnering with ERFT Innovation SPOCs to drive them toward implementation. She is actively engaged in OpenTap, having subscribed to five projects this year, with three (Connie, GenAI, Anytime Audit) already completed and two currently in progress.
+
+
+
+
+
+
+
 Add a distribution group to DFR APAC notification emails for improved alerting
 • Update the EMEA CABLEIN field type in the DFR Python process to accept all potential characters
 • Enhance DFR processes to include a fifth feed cycle
