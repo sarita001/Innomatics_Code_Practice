@@ -1,3 +1,23 @@
+Notification migration – Maintenance deadline emails now sent via Informatica with updated messaging.
+
+New Informatica processes – Implemented MFTD (GCO), BIFOUT (EMEA), and CABLEIN (LATAM/APAC) with parallel runs initiated.
+
+DFR APAC support – Deployed Informatica jobs, configuration, and batch changes to enable APAC go-live.
+
+Reconciliation improvements – Integrated TRADS, SWIFT, and GBS files into APAC Recon; added write-off items in matched groups.
+
+Process accuracy – Integrated Subaccount Rule in daily file generation; refined GIN reference construction logic.
+
+Operational readiness – Created a new Frontier Company and introduced user notifications post-import.
+
+Data & reporting upgrades – Added Fed code descriptions table, new TEBS balance view, and improved scheduling for Fed/LIQ files on holidays.
+
+
+
+
+
+
+
 Sarita has been a key contributor in supporting the Frontier Finance application, ensuring seamless reconciliation and configuration efforts, while also collaborating closely with the Informatica and Unix technology teams. She extended her expertise to Python-to-Informatica conversion scripts, enabling smooth processing during planned upgrades, and contributed significantly to the POC for migration from Content Navigator to Content Suite. She also developed Python scripts to automate file generation and upload to Content Suite, ensuring efficiency and reliability. Alongside this, she consistently supports critical activities such as month-end closures, daily and weekend job monitoring.
 
 Over the past year, Sarita has strengthened her technical expertise across Python, Informatica, Tableau, shell scripting, API testing, and played a pivotal role in the RHEL9 upgrade for Frontier. She has also taken on additional responsibilities as Change Coordinator, successfully delivering numerous CRQs for planned releases, and earning appreciation from the CIO and GBS leadership team multiple times.
