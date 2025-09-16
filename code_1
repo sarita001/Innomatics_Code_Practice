@@ -1,3 +1,15 @@
+Coordinating parallel validations across regions (APAC, LATAM, EMEA) and DR environments required extensive effort.
+
+Implementing holiday/weekend bundling for multiple feeds (FIRD, LIQ, Fed) introduced complex scheduling dependencies.
+
+Ensuring functional parity while migrating legacy Python and mainframe processes into Informatica demanded detailed reconciliation and testing.
+
+
+
+
+
+
+
 Executed ARC Switchover and Switchback for Frontier Finance with zero connectivity issues.
 
 Deployed critical Informatica enhancements: CABL GIN rebuild, daily FIRD with holiday bundling, FED duplicate filtering, FX rate load update, and CERT user email automation.
