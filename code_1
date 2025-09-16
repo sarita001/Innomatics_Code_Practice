@@ -1,4 +1,14 @@
-Accomplishments (Q3)
+Executed ARC Switchover and Switchback for Frontier Finance with zero connectivity issues.
+
+Deployed critical Informatica enhancements: CABL GIN rebuild, daily FIRD with holiday bundling, FED duplicate filtering, FX rate load update, and CERT user email automation.
+
+Supported DFR APAC go-live with Subaccount Rule integration, config changes, and job deployments. Began parallel runs for BIFOUT (EMEA), CABLEIN (LATAM/APAC), and MFD (GCO).
+
+Improved reporting and traceability via GCO unique identifiers, Fed code tables, and SQL views for Fed/TEBS reporting.
+
+Advanced file transmission modernization: TRADS, SWIFT, GBS feeds for APAC Recon, FIRD via Informatica (CD Gateway decommission), and LIQ holiday bundling.
+
+Strengthened security and access: Vault password rotations, new Frontier Company setup, reporting security groups, and enhanced notification coverage.Accomplishments (Q3)
 
 Successfully executed the ARC Switchover and Switchback for Frontier Finance with no connectivity issues, ensuring production stability and disaster recovery readiness.
 
