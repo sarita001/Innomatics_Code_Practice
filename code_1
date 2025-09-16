@@ -1,142 +1,71 @@
-Notification migration – Maintenance deadline emails now sent via Informatica with updated messaging.
+Accomplishments (Q3)
 
-New Informatica processes – Implemented MFTD (GCO), BIFOUT (EMEA), and CABLEIN (LATAM/APAC) with parallel runs initiated.
+Successfully executed the ARC Switchover and Switchback for Frontier Finance with no connectivity issues, ensuring production stability and disaster recovery readiness.
 
-DFR APAC support – Deployed Informatica jobs, configuration, and batch changes to enable APAC go-live.
+Deployed multiple Informatica enhancements including:
 
-Reconciliation improvements – Integrated TRADS, SWIFT, and GBS files into APAC Recon; added write-off items in matched groups.
+Rebuilt CABL GIN logic in Informatica and validated against Python output.
 
-Process accuracy – Integrated Subaccount Rule in daily file generation; refined GIN reference construction logic.
+Enabled daily (7-day) FIRD processing with holiday/weekend bundling.
 
-Operational readiness – Created a new Frontier Company and introduced user notifications post-import.
+Implemented posting-date duplicate filtering in FED load process.
 
-Data & reporting upgrades – Added Fed code descriptions table, new TEBS balance view, and improved scheduling for Fed/LIQ files on holidays.
+Updated FX rate load scheduling to run on the last calendar day.
 
+Automated CERT user email notifications by migrating logic from Python to Informatica.
 
+Developed an APS utility for SysUser status updates.
 
+Enhanced reporting and traceability through:
 
+Unique identifiers in GCO report.
 
+New Informatica table for Fed code descriptions.
 
+SQL view creation for Fed reporting and TEBS balances.
 
-Sarita has been a key contributor in supporting the Frontier Finance application, ensuring seamless reconciliation and configuration efforts, while also collaborating closely with the Informatica and Unix technology teams. She extended her expertise to Python-to-Informatica conversion scripts, enabling smooth processing during planned upgrades, and contributed significantly to the POC for migration from Content Navigator to Content Suite. She also developed Python scripts to automate file generation and upload to Content Suite, ensuring efficiency and reliability. Alongside this, she consistently supports critical activities such as month-end closures, daily and weekend job monitoring.
+Advanced regional deployments:
 
-Over the past year, Sarita has strengthened her technical expertise across Python, Informatica, Tableau, shell scripting, API testing, and played a pivotal role in the RHEL9 upgrade for Frontier. She has also taken on additional responsibilities as Change Coordinator, successfully delivering numerous CRQs for planned releases, and earning appreciation from the CIO and GBS leadership team multiple times.
+DFR APAC go-live support with Subaccount Rule integration, config changes, and Informatica job deployments.
 
-Sarita’s passion for innovation sets her apart. As a Hackathon Champion, she actively contributes to the GFT Patent Cluster and Innovation initiatives, guiding team members on logging and progressing SpeakUp, Dollar Save, and SB ideas, and partnering with ERFT Innovation SPOCs to drive them toward implementation. She is actively engaged in OpenTap, having subscribed to five projects this year, with three (Connie, GenAI, Anytime Audit) already completed and two currently in progress.
+Began parallel processing for BIFOUT (EMEA), CABLEIN (LATAM/APAC), and MFD (GCO).
 
+Improved file transmission and reconciliation:
 
+Added TRADS, SWIFT, GBS feeds into APAC Recon.
 
+Transmitted mainframe FIRD files via Informatica as part of CD Gateway decommissioning.
 
+Implemented LIQ holiday bundling.
 
+Strengthened security and compliance by rotating Vault passwords for Informatica and Certification DBs.
 
+Expanded user access and communication by:
 
-Add a distribution group to DFR APAC notification emails for improved alerting
-• Update the EMEA CABLEIN field type in the DFR Python process to accept all potential characters
-• Enhance DFR processes to include a fifth feed cycle
-• Run parallel validations for DFR GIN APAC LATAM and OBIEE view updates
-• Transmit mainframe FIRD files to Recon via Informatica
-• Create an SQL view to support Fed reporting and replace the legacy mainframe output
-• Implement SEPA import format to receive, load, and run automatching on consolidated item feeds, applying mapping updates and recollect templates if feeds fail to load
-• Update OBIEE views to support current reporting requirements
-• Implement password reset for IIS server and IN UI tool to enable self-service account transfers for approvers
-• Execute ARC Exercise 17570 for Frontier Finance, including switchback from contingency to production
-• Run primary production application, web, database, and MQ servers from the production environment
-• Validate end-to-end workflows, connectivity, and reporting to ensure production operates normally
-• Maintain backward compatibility and data integrity for all BAU and ARC processes
+Creating new Frontier Company setup (accounts, jobs, passes).
 
+Establishing security groups for reporting access.
 
+Enhancing notifications (RSS mailbox, Frontier import completion alerts, DFR APAC distribution group).
 
+Challenges Faced
 
+Complex parallel validation efforts across DR GIN, APAC, LATAM, and DFR OBIEE required close coordination and extended testing cycles.
 
+Managing holiday/weekend bundling logic for multiple feeds (FIRD, LIQ, Fed) introduced scheduling and sequencing dependencies.
 
+Migration of legacy Python and mainframe processes into Informatica required detailed reconciliation to ensure functional parity.
 
-Given the ARC failback exercise is executed and Frontier BAU updates including DFR enhancements, FIRD Recon file transmissions and reporting view, SEPA import format, OBIEE view updates, and IIS password reset are deployed,
-When all production servers (application, web, database, MQ) run from the primary production environment, BAU processes execute, feeds load and automatching runs, SQL views support reporting, and password resets allow self-service transfers,
-Then the system functions as expected with no connectivity issues, all end-to-end workflows complete successfully, and production operates normally.
+Focus Areas for Rest of the Year
 
+Complete regional Informatica parallel runs (DFR, CABLEIN, BIFOUT, MFD) and prepare for production cutovers.
 
+Strengthen reconciliation automation and validation frameworks to reduce manual checks during feed bundling and file transmissions.
 
+Progress on CD Gateway decommissioning and full transition of reporting/feeds to Informatica and SQL views.
 
+Expand data enrichment and traceability capabilities across reports (e.g., GIN reference logic, write-off handling).
 
-The deployment includes the ARC switchback for Frontier Finance along with Frontier BAU items covering DFR enhancements, FIRD Recon transmissions and reporting view, SEPA import format, OBIEE view updates, and IIS password reset. All validations are complete and systems are running smoothly in production.
+Continue security enhancements, including broader automation for credential rotations and scheduler monitoring.
 
-To conduct the ARC exercise for the Frontier Finance application by switching from the Production environment to the Frontier Disaster Recovery (DR) contingency environment. During this period, Production will be brought offline and the application will operate on contingency servers for 5 days until business validation is complete. After successful completion, the application will be switched back to the Production environment, thereby completing the ARC exercise.
-
-
-
-
-
-
-
-
-
-GIVEN the ARC failover activity for the Frontier Finance application,
-WHEN Production services are brought down and the application is switched over to the Disaster Recovery (DR) environment,
-THEN users should be able to log in successfully to the DR environment, and business sign-off will be provided upon completion of the failover activity.
-
-
-
-
-
-
-
-
-
-
-
-DFR APAC updates deployed to support regional go-live.
-	•	Certification process enhanced for improved efficiency.
-	•	Subaccount Rule integrated into daily file generation for accurate pre-assignment.
-	•	Data retention and file transmission improvements implemented.
-	•	Informatica DFR APAC jobs and batch processes successfully 	•	GIVEN the ARC failover exercise scheduled in September,
-	•	WHEN the application is switched from Production to the Disaster Recovery (DR) contingency environment and the Production system is brought offline,
-	•	THEN the application will run on contingency servers until business validations are successfully completed, after which it will be switched back to Production.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Added RSS mailbox for Certification scheduler failure notifications.
-	•	Migrated maintenance deadline emails from Frontier to Informatica.
-	•	Implemented MFTD, BIFOUT, and CABLEIN processes in Informatica with parallel runs.
-	•	Created new Frontier company with accounts, jobs, and match passes.
-	•	Enabled user notifications upon Frontier import completion.
-	•	Integrated TRADS, SWIFT, and GBS files into APAC Recon.
-	•	Updated logic to construct GIN references and include write-offs in matched groups.
-	•	Built Informatica table for Federal Reserve code descriptions.
-	•	Implemented Fed feed bundling for weekends/holidays and adjusted LIQ schedule for Christmas/New Year.
-	•	Created security groups for reporting access and a view for TEBS balance reporting.
-Implement DFR APAC enhancements in Informatica, Frontier, and OBIEE to automate access, streamline feed processing, and improve reconciliation and notifications in UAT and Production.
-
-Rationale
-
-These updates reduce manual effort, improve data accuracy, and enhance user experience. Automated OBIEE access ensures secure provisioning, reliable file processing supports financial integrity, and notifications give users visibility into reconciliation status.
-
-Outcome
-
-OBIEE provisions access for DFR APAC users via AD groups after scheduled batch runs.
-
-GBS, TRADS, and SWIFT files are processed in Informatica, imported into Frontier NAS, and reconciled in DFR APAC.
-
-Informatica processes IMSJ/P/M feeds and transmits outputs to NASPATH RECON without errors.
-
-Users receive automated emails when the DFR APAC match process starts and completes.
-
-
-Risk Description
-
-Deployment of DFR APAC changes in Informatica, Frontier, and OBIEE may cause risks such as incorrect OBIEE access via AD groups, failures in processing GBS/TRADS/SWIFT/IMSJ-P-M feeds, missed Frontier notifications, or system instability, leading to access issues, data gaps, or reconciliation delays.
-
-Risk Mitigation Plan
-
-Validate AD groups and OBIEE access in UAT, cross-check Informatica outputs with Python, enable job/notification monitoring, retain backup files for reprocessing, communicate timelines to users, provide hypercare support, and keep rollback plans ready for quick recovery.
+Ensure post-DFR APAC go-live stabilization and extend support for additional processing cycles.
