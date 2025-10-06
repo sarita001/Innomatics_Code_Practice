@@ -1,8 +1,49 @@
-Coordinating parallel validations across regions (APAC, LATAM, EMEA) and DR environments required extensive effort.
+Imagine remediating hundreds of legacy vulnerabilities — with one intelligent agent. That’s our vision.”
+Hi everyone. We are Team warriors ORCO, and we’re building an NPT Remediation Agent powered by GitHub Copilot.
 
-Implementing holiday/weekend bundling for multiple feeds (FIRD, LIQ, Fed) introduced complex scheduling dependencies.
+In today's fast paced environment,
+developers constantly deal with outdated frameworks — whether it’s .NET, Java, or front-end frameworks like Angular or React.
+Upgrading these manually, keeping them compliant with bank-approved versions, fixing vulnerabilities takes a lot of time and effort.
 
-Ensuring functional parity while migrating legacy Python and mainframe processes into Informatica demanded detailed reconciliation and testing.
+Our agent aims to automate the entire process.
+
+Here’s how the agent will work:
+	1. It first connects to Jira and reads the Acceptance Criteria in natural language.
+	2. It then interacts with the user, asking which tech stack and target version they want to migrate — for example, .NET 4.5 to .NET 6, or Angular 15 to Angular 17.
+	3. Based on these inputs, the agent creates a migration plan in markdown file — outlining upgrade steps, dependency changes, and Copilot prompts.
+	4. Developers can review and tweak this plan, such as updating library versions or configuration paths.
+	5. The agent then analyzes dependencies to ensure everything aligns with libraries.
+	6. Once validated, it uses Copilot to generate the migrated code class-by-class, creates a new repository, pushes the updated code, triggers the build, and finally deploys it to the lower lane server. Bitbucket is having migration repo.
+
+So instead of manually searching documentation or writing upgrade scripts, the agent will handle it end-to-end — saving time, reducing errors, and keeping everything secure and compliant.
+
+Now, let’s look at our current prototype, where we’ve tested this idea using basic Copilot prompting — before building the full agent.
+
+In the first example, we’re upgrading a project from .NET Framework 4.7.2 to .NET 8.
+We simply prompted Copilot with a natural instruction like:
+	“how to migrate .NETv 4.7.2 Framework 4.7.2 to .NET 8 ”
+And Copilot generated a detailed, step-by-step plan — outlining:
+	• the migration scripts,
+	• configuration file updates,
+	• project structure changes, and
+	• commands to refactor or rebuild certain components.
+
+
+Next, we tested it on the Angular side.
+We created a simple signup page in Angular 15, then prompted Copilot to convert it to Angular 17.
+
+Convert this Angular 15 signup project to Angular 17 and list all steps required for migration.”
+	
+Copilot immediately produced the complete migration flow — including updates to the package.json, dependency changes, compatibility adjustments, and code snippets for the new Angular APIs.
+
+So, what we demonstrated here is how Copilot can already understand natural language and generate precise, guided remediation steps.
+
+In the next phase, our NPT Remediation Agent will take this even further — connecting directly with Jira, auto-reading the acceptance criteria, generating migration plans dynamically, validating dependencies, and pushing upgraded code to repositories with minimal developer input.
+
+
+That’s our vision — using GitHub Copilot to build a truly smart remediation agent that transforms how upgrades and compliance are handled in the enterprise.
+
+Thank you for watching!
 
 
 
@@ -10,37 +51,31 @@ Ensuring functional parity while migrating legacy Python and mainframe processes
 
 
 
-Executed ARC Switchover and Switchback for Frontier Finance with zero connectivity issues.
 
-Deployed critical Informatica enhancements: CABL GIN rebuild, daily FIRD with holiday bundling, FED duplicate filtering, FX rate load update, and CERT user email automation.
 
-Supported DFR APAC go-live with Subaccount Rule integration, config changes, and job deployments. Began parallel runs for BIFOUT (EMEA), CABLEIN (LATAM/APAC), and MFD (GCO).
 
-Improved reporting and traceability via GCO unique identifiers, Fed code tables, and SQL views for Fed/TEBS reporting.
 
-Advanced file transmission modernization: TRADS, SWIFT, GBS feeds for APAC Recon, FIRD via Informatica (CD Gateway decommission), and LIQ holiday bundling.
 
-Strengthened security and access: Vault password rotations, new Frontier Company setup, reporting security groups, and enhanced notification coverage.Accomplishments (Q3)
 
-Successfully executed the ARC Switchover and Switchback for Frontier Finance with no connectivity issues, ensuring production stability and disaster recovery readiness.
 
-Deployed multiple Informatica enhancements including:
 
-Rebuilt CABL GIN logic in Informatica and validated against Python output.
 
-Enabled daily (7-day) FIRD processing with holiday/weekend bundling.
 
-Implemented posting-date duplicate filtering in FED load process.
 
-Updated FX rate load scheduling to run on the last calendar day.
 
-Automated CERT user email notifications by migrating logic from Python to Informatica.
 
-Developed an APS utility for SysUser status updates.
 
-Enhanced reporting and traceability through:
 
-Unique identifiers in GCO report.
+
+
+
+
+
+
+
+
+
+
 
 New Informatica table for Fed code descriptions.
 
