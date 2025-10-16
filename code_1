@@ -1,4 +1,7 @@
 
+Given the DFR October release introduces functional and performance enhancements across multiple components including CWABC, DR BIFOUT, BOT Transmission, Bad Value, SWIFT, Manual Statement, LIQ EMEA, RDR FX Load, and WTO,
+When comprehensive end-to-end validation is executed in the QA environment, covering all job runs, reports, and automated processes,
+Then all implemented updates — including new GL Account/Center logic, Informatica–Python mapping alignment, automated job restart on NDM failure, runtime alert notifications, revised Bad Value handling and reporting, optimized batch execution, enhanced SWIFT and Manual Statement reporting, improved scheduling, FX data load accuracy, and WTO performance filtering — should operate as intended with correct data outputs, stable performance, and no functional discrepancies, confirming the release is ready for production deployment.
 
 
 
