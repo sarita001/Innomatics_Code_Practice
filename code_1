@@ -1,49 +1,17 @@
-Imagine remediating hundreds of legacy vulnerabilities — with one intelligent agent. That’s our vision.”
-Hi everyone. We are Team warriors ORCO, and we’re building an NPT Remediation Agent powered by GitHub Copilot.
 
-In today's fast paced environment,
-developers constantly deal with outdated frameworks — whether it’s .NET, Java, or front-end frameworks like Angular or React.
-Upgrading these manually, keeping them compliant with bank-approved versions, fixing vulnerabilities takes a lot of time and effort.
 
-Our agent aims to automate the entire process.
 
-Here’s how the agent will work:
-	1. It first connects to Jira and reads the Acceptance Criteria in natural language.
-	2. It then interacts with the user, asking which tech stack and target version they want to migrate — for example, .NET 4.5 to .NET 6, or Angular 15 to Angular 17.
-	3. Based on these inputs, the agent creates a migration plan in markdown file — outlining upgrade steps, dependency changes, and Copilot prompts.
-	4. Developers can review and tweak this plan, such as updating library versions or configuration paths.
-	5. The agent then analyzes dependencies to ensure everything aligns with libraries.
-	6. Once validated, it uses Copilot to generate the migrated code class-by-class, creates a new repository, pushes the updated code, triggers the build, and finally deploys it to the lower lane server. Bitbucket is having migration repo.
 
-So instead of manually searching documentation or writing upgrade scripts, the agent will handle it end-to-end — saving time, reducing errors, and keeping everything secure and compliant.
 
-Now, let’s look at our current prototype, where we’ve tested this idea using basic Copilot prompting — before building the full agent.
 
-In the first example, we’re upgrading a project from .NET Framework 4.7.2 to .NET 8.
-We simply prompted Copilot with a natural instruction like:
-	“how to migrate .NETv 4.7.2 Framework 4.7.2 to .NET 8 ”
-And Copilot generated a detailed, step-by-step plan — outlining:
-	• the migration scripts,
-	• configuration file updates,
-	• project structure changes, and
-	• commands to refactor or rebuild certain components.
 
 
-Next, we tested it on the Angular side.
-We created a simple signup page in Angular 15, then prompted Copilot to convert it to Angular 17.
 
-Convert this Angular 15 signup project to Angular 17 and list all steps required for migration.”
-	
-Copilot immediately produced the complete migration flow — including updates to the package.json, dependency changes, compatibility adjustments, and code snippets for the new Angular APIs.
 
-So, what we demonstrated here is how Copilot can already understand natural language and generate precise, guided remediation steps.
 
-In the next phase, our NPT Remediation Agent will take this even further — connecting directly with Jira, auto-reading the acceptance criteria, generating migration plans dynamically, validating dependencies, and pushing upgraded code to repositories with minimal developer input.
 
 
-That’s our vision — using GitHub Copilot to build a truly smart remediation agent that transforms how upgrades and compliance are handled in the enterprise.
 
-Thank you for watching!
 
 
 
@@ -56,6 +24,18 @@ Thank you for watching!
 
 
 
+Added new GL Account/Center combination for Corporate Workplace Balance Compare with additional SAP logic.
+	•	Updated NewRef mapping logic in Informatica to align with Python script changes.
+	•	Enhanced BOT script to restart job automatically on NDM transmission failure.
+	•	Implemented job run-time alert to notify if execution exceeds 45 minutes.
+	•	Removed 300,000 limit restriction in Bad Value process and ensured proper open handling.
+	•	Updated Bad Value report to display all open and auto-closed values for the day.
+	•	Modified batch logic to send end-of-feed report only once per feed.
+	•	Enhanced SWIFT Import report to generate daily-only and added historical tracking.
+	•	Fixed Manual Statement report display and introduced history report for all regions.
+	•	Updated LIQ EMEA schedule to allow additional reprocessing time.
+	•	Loaded FX data into tables for Certification reporting.
+	•	Added WTO CYC2 filtering to reduce file size and improve processing time.
 
 
 
@@ -70,59 +50,3 @@ Thank you for watching!
 
 
 
-
-
-
-
-
-
-
-New Informatica table for Fed code descriptions.
-
-SQL view creation for Fed reporting and TEBS balances.
-
-Advanced regional deployments:
-
-DFR APAC go-live support with Subaccount Rule integration, config changes, and Informatica job deployments.
-
-Began parallel processing for BIFOUT (EMEA), CABLEIN (LATAM/APAC), and MFD (GCO).
-
-Improved file transmission and reconciliation:
-
-Added TRADS, SWIFT, GBS feeds into APAC Recon.
-
-Transmitted mainframe FIRD files via Informatica as part of CD Gateway decommissioning.
-
-Implemented LIQ holiday bundling.
-
-Strengthened security and compliance by rotating Vault passwords for Informatica and Certification DBs.
-
-Expanded user access and communication by:
-
-Creating new Frontier Company setup (accounts, jobs, passes).
-
-Establishing security groups for reporting access.
-
-Enhancing notifications (RSS mailbox, Frontier import completion alerts, DFR APAC distribution group).
-
-Challenges Faced
-
-Complex parallel validation efforts across DR GIN, APAC, LATAM, and DFR OBIEE required close coordination and extended testing cycles.
-
-Managing holiday/weekend bundling logic for multiple feeds (FIRD, LIQ, Fed) introduced scheduling and sequencing dependencies.
-
-Migration of legacy Python and mainframe processes into Informatica required detailed reconciliation to ensure functional parity.
-
-Focus Areas for Rest of the Year
-
-Complete regional Informatica parallel runs (DFR, CABLEIN, BIFOUT, MFD) and prepare for production cutovers.
-
-Strengthen reconciliation automation and validation frameworks to reduce manual checks during feed bundling and file transmissions.
-
-Progress on CD Gateway decommissioning and full transition of reporting/feeds to Informatica and SQL views.
-
-Expand data enrichment and traceability capabilities across reports (e.g., GIN reference logic, write-off handling).
-
-Continue security enhancements, including broader automation for credential rotations and scheduler monitoring.
-
-Ensure post-DFR APAC go-live stabilization and extend support for additional processing cycles.
