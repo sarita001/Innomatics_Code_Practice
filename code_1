@@ -1,3 +1,67 @@
+Risk Description
+
+Script failures if Python references are not updated properly.
+
+OBIEE report connection issues after switching to DR.
+
+Scheduling conflicts due to manual statement timing changes.
+
+Data mismatch or file errors from Logic 69 or NBSP fixes.
+
+Archival or validation failures in APAC GIN updates.
+
+Missing data in BAD Value Report after logic update.
+
+Job execution delays from Frontier configuration changes.
+
+Risk Mitigation Plan
+
+Perform full regression testing in CERT before deployment.
+
+Validate OBIEE DR connectivity and report generation.
+
+Confirm schedule changes with upstream/downstream teams.
+
+Test Informatica changes and verify file outputs.
+
+Validate report logic and archival paths post-deployment.
+
+Review Frontier job execution timing after go-live.
+
+Keep rollback plan and backups ready for quick restoration.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Objective
 
 Upgrade all scripts and references to Python 3.11.11 under Phase 2 to ensure compatibility, stability, and compliance.
