@@ -1,36 +1,20 @@
-Risk Description
+Updating all existing script references and configurations to point to Python 3.11.11 as part of Phase 2 upgrade.
 
-Script failures if Python references are not updated properly.
+Modifying environment variables, job parameters, and Control-M scripts to ensure compatibility with the new Python version.
 
-OBIEE report connection issues after switching to DR.
+Reconfiguring OBIEE Cert Report connection strings to establish reporting from the DR database instead of production.
 
-Scheduling conflicts due to manual statement timing changes.
+Adjusting DR APAC Manual Statement schedule timing in Control-M to align with upstream processing windows.
 
-Data mismatch or file errors from Logic 69 or NBSP fixes.
+Implementing Logic 69 changes in DFR APAC Informatica to update the SWIFT file field for accurate matching.
 
-Archival or validation failures in APAC GIN updates.
+Applying the NBSP character fix in the TRADS file by replacing nonbreaking spaces with empty spaces during file generation.
 
-Missing data in BAD Value Report after logic update.
+Updating APAC GIN archival path and schedule to support parallel validation and new file archival standards.
 
-Job execution delays from Frontier configuration changes.
+Enhancing the DR BAD Value Report logic to filter and display only recent items.
 
-Risk Mitigation Plan
-
-Perform full regression testing in CERT before deployment.
-
-Validate OBIEE DR connectivity and report generation.
-
-Confirm schedule changes with upstream/downstream teams.
-
-Test Informatica changes and verify file outputs.
-
-Validate report logic and archival paths post-deployment.
-
-Review Frontier job execution timing after go-live.
-
-Keep rollback plan and backups ready for quick restoration.
-
-
+Applying Frontier configuration and scheduling updates as part of DR APAC Phase 2 deployment to ensure consistent job sequencing.
 
 
 
