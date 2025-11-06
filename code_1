@@ -1,21 +1,18 @@
+All scripts and configurations point to Python 3.11.11 and execute successfully.
 
-Update all references and scripts to use Python 3.11.11 as part of Phase 2 upgrade.
+OBIEE Cert Report connects to the DR database and generates reports without errors.
 
-Update OBIEE Cert Report configuration to connect to the DR database for report generation.
+The updated DR APAC Manual Statement Schedule runs at the new time as expected.
 
-Change DR APAC Manual Statement Schedule timing as requested by the upstream application to enable faster processing.
+DFR APAC Informatica Logic 69 changes reflect correctly in the SWIFT file output.
 
-Implement Logic 69 change in DFR APAC Informatica to update the SWIFT file field for better matching.
+NBSP character replacement in the TRADS file is implemented and verified.
 
-Fix NBSP character issue in TRADS file by replacing nonblank characters with empty spaces.
+APAC GIN archival path and schedule are updated and validated for correct file movement and parallel validation completion.
 
-Update APAC GIN archival path and schedule to complete parallel validation and enable new file implementation.
+DR BAD Value Report returns only recent items as per the updated logic.
 
-Enhance DR BAD Value Report to return only recent items instead of all items.
-
-Apply Frontier configuration and scheduling updates for DR APAC Phase 2 implementation.
-
-
+Frontier configuration and schedule updates are successfully applied and validated in DR.
 
 
 
