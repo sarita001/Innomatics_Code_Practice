@@ -1,11 +1,19 @@
 
-Given the DFR October release introduces functional and performance enhancements across multiple components including CWABC, DR BIFOUT, BOT Transmission, Bad Value, SWIFT, Manual Statement, LIQ EMEA, RDR FX Load, and WTO,
-When comprehensive end-to-end validation is executed in the QA environment, covering all job runs, reports, and automated processes,
-Then all implemented updates — including new GL Account/Center logic, Informatica–Python mapping alignment, automated job restart on NDM failure, runtime alert notifications, revised Bad Value handling and reporting, optimized batch execution, enhanced SWIFT and Manual Statement reporting, improved scheduling, FX data load accuracy, and WTO performance filtering — should operate as intended with correct data outputs, stable performance, and no functional discrepancies, confirming the release is ready for production deployment.
+Update all references and scripts to use Python 3.11.11 as part of Phase 2 upgrade.
 
+Update OBIEE Cert Report configuration to connect to the DR database for report generation.
 
+Change DR APAC Manual Statement Schedule timing as requested by the upstream application to enable faster processing.
 
+Implement Logic 69 change in DFR APAC Informatica to update the SWIFT file field for better matching.
 
+Fix NBSP character issue in TRADS file by replacing nonblank characters with empty spaces.
+
+Update APAC GIN archival path and schedule to complete parallel validation and enable new file implementation.
+
+Enhance DR BAD Value Report to return only recent items instead of all items.
+
+Apply Frontier configuration and scheduling updates for DR APAC Phase 2 implementation.
 
 
 
