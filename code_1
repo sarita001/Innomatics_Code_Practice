@@ -1,11 +1,55 @@
-Informatica Frontier Certification Workflow is impacted as the email generation logic now filters out inactive users, ensuring only Active users are included in notifications.
+Given the Informatica workflow uses the updated SQL query for email generation, CDI-PC configuration files are updated with new truststore parameters and cleaned of old INFA_HOME references, and IMPACS processing is revised to remove S76 files and retain only S71 file logic,
+
+When the workflow executes, the CDI-PC client initializes and connects to PROD domains, and the Autosys job FFW_IMPACS_ABCDET_EXTRACT runs the recon and merge process,
+
+Then the email list includes only Active users, the CDI-PC client connects successfully and all jobs run without errors, and the updated IMPACS merge script processes only S71 files and completes successfully with no failures.
 
 
-CDI-PC Configuration Files are impacted through the removal of outdated INFA_HOME references and the addition of new truststore parameters, altering how the CDI-PC client authenticates and connects to PROD domains.
 
 
-IMPACS Processing Workflow is impacted by the decommissioning of S76 files, requiring updates so that only S71 files are validated, merged, and processed.
 
 
-Autosys Jobs and Merge Script are impacted because the revised script now handles only S71 file checks and merge logic, changing the job’s expected file inputs and processing behavior.
+Updating the SQL query to filter and pull only Active users from the sysuser table for email generation.
+
+
+Modifying CDI-PC configuration by removing old INFA_HOME references and adding INFA_TRUSTSTORE, INFA_TRUSTSTORE_PASSWORD, and updated INFA_HOME parameters.
+
+
+Updating reference paths in .odbc.ini and ensuring all parameter files point to the correct CDI-PC cloudified locations.
+
+
+Ensuring the CDI-PC client is loading the new truststore settings and establishing secure connectivity to all PROD domains.
+
+
+Decommissioning S76 file handling across IMPACS processing and removing any logic referencing S76 inputs.
+
+
+Updating the IMPACS merge logic to validate and process only S71 data files.
+
+
+Revising the Autosys merge script (IMPACS_ABCDET_merge.sh) to perform recon and merge steps using only S71 file inputs.
+
+
+Ensuring all Informatica and Autosys components consume the updated configuration paths and file expectations during execution.
+
+
+
+
+
+
+
+
+
+
+
+Description
+
+
+Enhancing the Informatica email workflow by implementing an updated SQL query that retrieves only Active users from the sysuser table, ensuring email notifications are sent exclusively to valid and active recipients.
+
+
+Updating CDI-PC configurations by removing outdated INFA_HOME references, adding the required truststore parameters, and refreshing reference paths in parameter files to ensure the CDI-PC client connects reliably to PROD domains and all associated jobs run without errors.
+
+
+Streamlining IMPACS processing by fully decommissioning the 33 S76 files, updating validation and merge logic to handle only the remaining S71 files, and modifying the Autosys merge script to ensure the recon and merge process completes accurately and successfully.
 
