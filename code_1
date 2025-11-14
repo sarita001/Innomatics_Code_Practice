@@ -1,17 +1,84 @@
-The email distribution update ensures only Active users are notified, preventing incorrect or unnecessary email triggers.
+To update Informatica workflows, CDI-PC configurations, and IMPACS processing logic to ensure accurate email notifications, compliant cloudification settings, and correct handling of S71 files after decommissioning the S76 file set.
+
+Rationale
+
+These changes are required to:
+
+Restrict email notifications to Active users only, improving accuracy and reducing unnecessary communication.
+
+Align CDI-PC configurations with updated cloudification standards, ensuring reliable connectivity and error-free job execution in PROD.
+
+Remove dependency on the decommissioned S76 files and ensure IMPACS processing reflects the updated 33-file S71 structure.
+
+Outcome
+
+The workflows generate correct email lists, CDI-PC connects to PROD domains without errors, and IMPACS processing completes successfully using only S71 files. All jobs, scripts, and configurations function consistently post-deployment with no failures or unexpected behavior.
 
 
-CDI-PC configuration changes are essential to align with the cloudification standards and ensure stable PROD domain connectivity.
+Impacted Area
+
+Informatica workflows (Frontier Certification & IMPACS)
+
+CDI-PC (Cloudification of PowerCenter Domains) configuration files
+
+Autosys jobs and associated merge scripts
+
+Parameter files
 
 
-Parameter file updates (autosys_jobmanrc.in, .odbc.ini) must be verified after deployment to avoid runtime failures.
+The email workflow now includes only Active users, improving notification accuracy. CDI-PC configuration updates modify truststore and environment parameter handling, impacting how the client connects to PROD domains. IMPACS processing changes remove S76 file handling and shift logic to S71-only processing, affecting recon and merge workflows. All updates enhance consistency and reduce processing errors across the Informatica and Autosys environments.
 
 
-S76 file decommissioning reduces unnecessary processing and simplifies IMPACS data flow.
+
+Dependent Area
+
+Application Development Team
+
+Informatica Administration Team
+
+Autosys Scheduling Team
+
+CDI-PC Support Team
+
+Production Support / L3 Team
 
 
-The updated merge script is expected to handle only S71 files, so any S76 file arrival post-deployment should be treated as an exception.
+
+Application Development Team is dependent on these changes to ensure workflows execute with the correct SQL logic, updated parameters, and accurate file-processing rules.
+
+Informatica Administration Team depends on the revised truststore and environment configurations to maintain stable and secure connectivity to the PROD domains.
+
+Autosys Scheduling Team depends on the updated merge script and new S71-only logic to ensure scheduled jobs run successfully without expecting decommissioned S76 files.
+
+CDI-PC Support Team relies on the updated configuration files to ensure the CDI-PC client connects properly to all PROD domains after cloudification updates.
+
+Production Support / L3 Team depends on the correctness of these changes to prevent workflow failures, reduce incidents, and support smooth post-deployment operations.
 
 
-All teams should confirm workflow and job stability during the post-deployment monitoring window.
 
+
+Risk Description
+
+Incorrect parameter updates or truststore configurations may cause CDI-PC connectivity failures in PROD domains.
+
+Workflow dependencies may break if incorrect users are included or excluded in the updated email distribution logic.
+
+IMPACS processing may fail if any S76 file unexpectedly arrives or if the merge script does not correctly handle S71-only logic.
+
+Autosys jobs may encounter errors if updated script paths or file expectations are incorrect.
+
+Any misconfiguration in .odbc.ini or autosys_jobmanrc.in may lead to job failures or environment instability.
+
+Risk Mitigation Plan
+
+Perform pre-deployment validation of all parameter files, truststore paths, and configuration updates.
+
+Validate the updated SQL query in lower environments to ensure only Active users are included in the email list.
+
+Conduct controlled testing of IMPACS S71-only processing and ensure the merge script handles the updated logic accurately.
+
+Monitor Autosys jobs during the initial execution window post-deployment to detect any missed references or file mismatches.
+
+Maintain a rollback plan with backups of all original configuration files to restore the previous state if required.
+
+Keep all support teams (Informatica Admin, Autosys, CDI-PC Support, Production Support) on standby during the deployment window for quick issue resolution.
