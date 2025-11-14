@@ -1,41 +1,17 @@
-1. Frontier Certification Email Update
+The email distribution update ensures only Active users are notified, preventing incorrect or unnecessary email triggers.
 
 
-Workflow generates the email list with only Active users.
+CDI-PC configuration changes are essential to align with the cloudification standards and ensure stable PROD domain connectivity.
 
 
-Updated SQL query executes successfully and excludes inactive users.
+Parameter file updates (autosys_jobmanrc.in, .odbc.ini) must be verified after deployment to avoid runtime failures.
 
 
-Workflow completes without any errors.
+S76 file decommissioning reduces unnecessary processing and simplifies IMPACS data flow.
 
 
-2. CDI-PC Cloudification Update
+The updated merge script is expected to handle only S71 files, so any S76 file arrival post-deployment should be treated as an exception.
 
 
-Old INFA_HOME references are removed and new truststore parameters are added.
-
-
-Updated .odbc.ini and parameter files load correctly.
-
-
-CDI-PC client connects to all PROD domains successfully.
-
-
-All CDI-PC jobs run and validate without errors.
-
-
-3. IMPACS S76 Decommissioning
-
-
-S76 files are fully decommissioned and not processed.
-
-
-Processing logic checks only the 33 S71 files.
-
-
-Autosys job FFW_IMPACS_ABCDET_EXTRACT runs successfully with the updated merge script.
-
-
-Merge script processes S71 data cleanly and completes recon/merge without failures.
+All teams should confirm workflow and job stability during the post-deployment monitoring window.
 
