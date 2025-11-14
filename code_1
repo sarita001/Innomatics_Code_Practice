@@ -1,2 +1,41 @@
-The CDI-PC update removes old INFA_HOME references, adds the required truststore parameters, and updates reference paths in the parameter files. These changes ensure the CDI-PC client connects to PROD domains successfully and all jobs run without errors.
-The IMPACS update decommissions the 33 S76 files and updates processing to handle only the remaining 33 S71 files. The Autosys job FFW_IMPACS_ABCDET_EXTRACT now runs recon and merge checks using the revised IMPACS_ABCDET_merge.sh script, which processes S71 data only and completes successfully without errors.
+1. Frontier Certification Email Update
+
+
+Workflow generates the email list with only Active users.
+
+
+Updated SQL query executes successfully and excludes inactive users.
+
+
+Workflow completes without any errors.
+
+
+2. CDI-PC Cloudification Update
+
+
+Old INFA_HOME references are removed and new truststore parameters are added.
+
+
+Updated .odbc.ini and parameter files load correctly.
+
+
+CDI-PC client connects to all PROD domains successfully.
+
+
+All CDI-PC jobs run and validate without errors.
+
+
+3. IMPACS S76 Decommissioning
+
+
+S76 files are fully decommissioned and not processed.
+
+
+Processing logic checks only the 33 S71 files.
+
+
+Autosys job FFW_IMPACS_ABCDET_EXTRACT runs successfully with the updated merge script.
+
+
+Merge script processes S71 data cleanly and completes recon/merge without failures.
+
