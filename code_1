@@ -1,3 +1,34 @@
+Updated all references and scripts to Python 3.11.11.
+	•	Reconfigured OBIEE Cert Report to use the DR database.
+	•	Adjusted DFR APAC Manual Statement Schedule timing for faster processing.
+	•	Implemented Logic 69 change in DFR APAC Informatica for better SWIFT field matching.
+	•	Fixed NBSP character issue in TRADS file by replacing nonblank characters.
+	•	Updated APAC GIN archival path and schedule for parallel validation and new file implementation.
+	•	Enhanced DR BAD Value Report to return only recent items.
+	•	Applied Frontier configuration and scheduling updates for DR APAC Phase 2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Informatica Workflow Update
 The workflow now uses an enhanced SQL query on the sysuser table to generate email distribution lists. The updated logic ensures that only active users are included while inactive users are automatically excluded, resulting in accurate and up-to-date notification lists.
 
