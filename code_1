@@ -1,3 +1,17 @@
+The Informatica workflow generated the email user list using an updated SQL query on the sysuser table, including only Active users and excluding inactive ones, ensuring notifications were sent only to valid recipients.
+	•	The CDI-PC cloudification update removed outdated INFA_HOME references, added the required truststore parameters, and updated reference paths in the parameter files, allowing the CDI-PC client to connect successfully to PROD and enabling all jobs to run without errors.
+	•	The IMPACS update decommissioned the 33 S76 files and updated processing to handle only the 33 S71 files. The Autosys job FFW_IMPACS_ABCDET_EXTRACT ran recon and merge checks using the revised IMPACS_ABCDET_merge.sh script, which processed only S71 data and completed successfully without errors.
+
+
+
+
+
+
+
+
+
+
+
 Updated all references and scripts to Python 3.11.11.
 	•	Reconfigured OBIEE Cert Report to use the DR database.
 	•	Adjusted DFR APAC Manual Statement Schedule timing for faster processing.
