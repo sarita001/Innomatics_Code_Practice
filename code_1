@@ -1,4 +1,17 @@
 Dependent Area: Application Development Team
+	•	Application development team will support validation of logic changes and confirmation of application behavior post-deployment.
+
+Dependent Area: Database Administration Team
+	•	Database administration team will assist with creation, access, and validation of new or updated database objects.
+
+Dependent Area: Scheduling Team
+	•	Scheduling team will support validation of scheduler configurations and ensure no impact to existing job schedules.
+
+Dependent Area: Informatica Support Team
+	•	Informatica support team will assist with deployment, monitoring, and resolution of workflow or mapping-related issues.
+
+Dependent Area: Frontier Configuration Team
+	•	Frontier configuration team will support configuration validation and ensure alignment with Frontier-related updates.Dependent Area: Application Development Team
 	•	Support required for validation of logic changes and confirmation of application behavior post-deployment.
 
 Dependent Area: Database Administration Team
