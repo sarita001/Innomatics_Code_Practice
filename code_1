@@ -1,4 +1,27 @@
-To correct date population for ISBC and CIB024 files, enhance data security and compliance, standardize CERT workflows, improve reporting consistency, and prepare foundational architecture for future system migrations and reporting needs.
+Impacted Area: Informatica
+	•	Updates to mappings, workflows, and tables to support data corrections, reporting enhancements, and future-ready processing.
+
+Impacted Area: Frontier
+	•	Minor logic updates to support admin standardization and Frontier version alignment.
+
+Impacted Area: Python
+	•	Enhancements to processing logic to improve data accuracy, filtering, and output content.
+
+Impacted Area: Database Connectivity
+	•	Database changes to support new tables and updated queries with no impact to existing connectivity.
+
+
+
+
+
+
+
+
+
+
+
+
+date population for ISBC and CIB024 files, enhance data security and compliance, standardize CERT workflows, improve reporting consistency, and prepare foundational architecture for future system migrations and reporting needs.
 
 Rationale
 	•	Late file arrivals result in incorrect date population when system date is used.
