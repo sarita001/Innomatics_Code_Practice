@@ -1,3 +1,35 @@
+To correct date population for ISBC and CIB024 files, enhance data security and compliance, standardize CERT workflows, improve reporting consistency, and prepare foundational architecture for future system migrations and reporting needs.
+
+Rationale
+	•	Late file arrivals result in incorrect date population when system date is used.
+	•	Audit reviews require removal of sensitive credit card information from descriptive text.
+	•	Inactive scheduler reports contain invalid entries impacting report accuracy.
+	•	Future migration of Fed R3XP processing requires staging tables in Informatica.
+	•	Admin name inconsistencies across databases impact CERT workflow standardization.
+	•	Lack of visibility into unmapped DDA records limits reporting capabilities.
+	•	Missing Account Name in output files reduces clarity for downstream users.
+	•	Regional DFR reports lack consistency, leading to reconciliation inefficiencies.
+
+Outcome
+	•	ISBC and CIB024 files populate accurate dates using header information.
+	•	Sensitive credit card data is filtered, ensuring audit compliance.
+	•	Scheduler reports reflect only valid inactive schedulers.
+	•	R3XP staging tables provide a scalable foundation for future Informatica migration.
+	•	CERT workflows use standardized admin naming and support upcoming Frontier versions.
+	•	Unmapped DDA records are captured for future reporting and analysis.
+	•	Output and update files include Account Name for improved usability.
+	•	DFR reconciliation reports are standardized across APAC, EMEA, and LATAM.
+
+
+
+
+
+
+
+
+
+
+
 Updating ISBC and CIB024 date derivation logic by reading the file header date and using it as the processing date to handle late file arrivals after midnight
 	•	Implementing credit card number masking and filtering logic within FR3 GBS descriptive text fields to meet audit and confidentiality requirements
 	•	Removing invalid scheduler ID 49 during inactive scheduler report generation by applying exclusion rules in report logic
