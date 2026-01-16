@@ -1,3 +1,16 @@
+Update ISBC and CIB024 processing to derive dates from file header instead of system date
+	•	Implement filtering to remove sensitive credit card data from descriptive text
+	•	Clean up inactive scheduler report by excluding invalid scheduler entries
+	•	Introduce R3XP staging tables to support future mainframe-to-Informatica migration
+	•	Enhance CERT workflows to standardize admin logic and support Frontier readiness
+	•	Create Fed DDA table to capture unmapped records for future reporting
+	•	Enhance reconciliation reports to align EMEA and LATAM with APAC standards
+	•	Update workflow and account update output files to include Account Name
+
+
+
+
+
 Ensure comprehensive validation through controlled testing cycles and peer reviews to confirm data accuracy and logic correctness.
 
 
