@@ -1,1 +1,39 @@
-Given ISBC/CIB024 processing, FR3 data handling, scheduler reporting, R3XP staging, CERT workflows, DDA processing, DFR reconciliation reporting, and account update file generation are executed, when the enhanced logic and mappings are applied, then file dates are derived from header dates, credit card data is filtered, invalid scheduler ID 49 is excluded, R3XP staging tables are populated, RecAdminFF is applied for admin standardization, unmapped DDA records are captured, EMEA/LATAM reports align with APAC, and Account Name is included in all relevant output files.
+Updating ISBC and CIB024 date derivation logic by reading the file header date and using it as the processing date to handle late file arrivals after midnight
+	•	Implementing credit card number masking and filtering logic within FR3 GBS descriptive text fields to meet audit and confidentiality requirements
+	•	Removing invalid scheduler ID 49 during inactive scheduler report generation by applying exclusion rules in report logic
+	•	Building R3XP staging tables in Informatica to store intermediate data and support future migration from mainframe-based processing
+	•	Enhancing CERT workflow mappings by including RecAdminFF in filter conditions to standardize admin naming across databases and support Frontier readiness
+	•	Creating a Fed DDA table in Informatica to capture unmapped DDA records for future reporting and analysis
+	•	Adding Account Name field to CERT workflow output file layouts to improve data clarity and downstream consumption
+	•	Updating DFR reconciliation report logic for EMEA and LATAM regions to align structure and formatting with the APAC reports
+	•	Extending account update file generation logic to include Account Name in the output records
+
+
+
+
+
+
+
+
+
+
+
+
+
+Given ISBC/CIB024 processing, FR3 data handling, scheduler reporting, R3XP staging, CERT workflows, DDA processing, DFR reconciliation reporting, and account update f
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+rting, R3XP staging, CERT workflows, DDA processing, DFR reconciliation reporting, and account update file generation are executed, when the enhanced logic and mappings are applied, then file dates are derived from header dates, credit card data is filtered, invalid scheduler ID 49 is excluded, R3XP staging tables are populated, RecAdminFF is applied for admin standardization, unmapped DDA records are captured, EMEA/LATAM reports align with APAC, and Account Name is included in all relevant output files.
