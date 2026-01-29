@@ -1,7 +1,15 @@
 Congratulations on completing 15 years! I really appreciate all the guidance and support you’ve given me—it has made a big difference in my learning and growth. Thank you for always being there to help and guide me. Wishing you lots of success and happiness in the years ahead!
 
 
-
+Validated ISBC/CIB024 file dates from headers and confirmed no post-midnight drift.
+	•	Filtered and masked Luhn-valid PANs, achieving zero unmasked PANs with audit sign-off.
+	•	Removed scheduler 49 from the inactive report without impacting other totals or consumers.
+	•	Built Fed R3XP staging tables, matching mainframe outputs at ≥99.9% and meeting SLA requirements.
+	•	Updated mappings to include RecAdminFF and standardized Admin names with zero regressions.
+	•	Created Informatica table for unmapped DDA records, populated it accurately, and enabled alerting.
+	•	Added Account Name to workflow outputs while preserving schema order and downstream compatibility.
+	•	Added Account Name to account update outputs, validating create/update parity and backward compatibility.
+	•	Mirrored APAC layout and logic in EMEA/LATAM reports, localized formats, and passed UAT sign-off.
 
 
 Update ISBC and CIB024 processing to derive dates from file header instead of system date
